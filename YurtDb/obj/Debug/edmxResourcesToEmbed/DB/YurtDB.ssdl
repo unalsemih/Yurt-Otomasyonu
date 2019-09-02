@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="YurtDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Donem">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="baslangicTarihi" Type="datetime" />
+    <Property Name="bitisTarihi" Type="datetime" />
+    <Property Name="gunSayisi" Type="int" />
+    <Property Name="donemAdi" Type="varchar" MaxLength="50" />
+    <Property Name="aktiflik" Type="int" />
+    <Property Name="arsiv" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="donemTipi">
+    <Key>
+      <PropertyRef Name="donemTipiID" />
+    </Key>
+    <Property Name="donemTipiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adi" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="evrakBilgileri">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="evrakTipiID" Type="int" />
+    <Property Name="link" Type="varchar" MaxLength="250" />
+    <Property Name="ogrenciNo" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="evrakTipi">
+    <Key>
+      <PropertyRef Name="evrakTipiID" />
+    </Key>
+    <Property Name="evrakTipiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adi" Type="varchar" MaxLength="50" />
+    <Property Name="zorunluluk" Type="int" />
+    <Property Name="arsiv" Type="int" />
+    <Property Name="gorunum" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="indirimler">
+    <Key>
+      <PropertyRef Name="indirimlerID" />
+    </Key>
+    <Property Name="indirimlerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="aciklama" Type="varchar" MaxLength="50" />
+    <Property Name="indirimOrani" Type="float" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="Kayıt">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ogrenciNo" Type="int" />
+    <Property Name="odaBilgileri" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="odaFiyatlari">
+    <Key>
+      <PropertyRef Name="odaFiyatlariID" />
+    </Key>
+    <Property Name="odaFiyatlariID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="aciklama" Type="varchar" MaxLength="50" />
+    <Property Name="odaTipiId" Type="int" />
+    <Property Name="indirimId" Type="int" />
+    <Property Name="fiyat" Type="float" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="odaTipi">
+    <Key>
+      <PropertyRef Name="odaTipiID" />
+    </Key>
+    <Property Name="odaTipiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="adi" Type="varchar" MaxLength="50" />
+    <Property Name="odaKontenjan" Type="int" />
+    <Property Name="odaTipiKontenjanID" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="odaTipiKontenjan">
+    <Key>
+      <PropertyRef Name="odaTipiKontenjanID" />
+    </Key>
+    <Property Name="odaTipiKontenjanID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="erkekKontenjan" Type="int" />
+    <Property Name="kizKontenjan" Type="int" />
+    <Property Name="toplam" Type="int" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="ogrenci">
+    <Key>
+      <PropertyRef Name="ogrenciNo" />
+    </Key>
+    <Property Name="ogrenciNo" Type="int" Nullable="false" />
+    <Property Name="tcNo" Type="bigint" />
+    <Property Name="adi" Type="varchar" MaxLength="50" />
+    <Property Name="soyadi" Type="varchar" MaxLength="50" />
+    <Property Name="egitimDurumu" Type="varchar" MaxLength="50" />
+    <Property Name="fakulteNo" Type="varchar" MaxLength="50" />
+    <Property Name="bolumNo" Type="varchar" MaxLength="50" />
+    <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <Association Name="FK__Donem__donemTipi__1273C1CD">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="Donem" Type="Self.Donem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="Donem">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__evrakBilg__donem__2B3F6F97">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="evrakBilgileri" Type="Self.evrakBilgileri" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="evrakBilgileri">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__evrakBilg__evrak__29572725">
+    <End Role="evrakTipi" Type="Self.evrakTipi" Multiplicity="0..1" />
+    <End Role="evrakBilgileri" Type="Self.evrakBilgileri" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="evrakTipi">
+        <PropertyRef Name="evrakTipiID" />
+      </Principal>
+      <Dependent Role="evrakBilgileri">
+        <PropertyRef Name="evrakTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__evrakBilg__ogren__2A4B4B5E">
+    <End Role="ogrenci" Type="Self.ogrenci" Multiplicity="0..1" />
+    <End Role="evrakBilgileri" Type="Self.evrakBilgileri" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenci">
+        <PropertyRef Name="ogrenciNo" />
+      </Principal>
+      <Dependent Role="evrakBilgileri">
+        <PropertyRef Name="ogrenciNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__evrakTipi__donem__267ABA7A">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="evrakTipi" Type="Self.evrakTipi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="evrakTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__indirimle__donem__1BFD2C07">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="indirimler" Type="Self.indirimler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="indirimler">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kayıt__donemTipi__2F10007B">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="Kayıt">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kayıt__odaBilgil__2E1BDC42">
+    <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="0..1" />
+    <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="odaFiyatlari">
+        <PropertyRef Name="odaFiyatlariID" />
+      </Principal>
+      <Dependent Role="Kayıt">
+        <PropertyRef Name="odaBilgileri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaFiyatl__donem__20C1E124">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="odaFiyatlari">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaFiyatl__indir__1FCDBCEB">
+    <End Role="indirimler" Type="Self.indirimler" Multiplicity="0..1" />
+    <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="indirimler">
+        <PropertyRef Name="indirimlerID" />
+      </Principal>
+      <Dependent Role="odaFiyatlari">
+        <PropertyRef Name="indirimId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaFiyatl__odaTi__1ED998B2">
+    <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="0..1" />
+    <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="odaTipi">
+        <PropertyRef Name="odaTipiID" />
+      </Principal>
+      <Dependent Role="odaFiyatlari">
+        <PropertyRef Name="odaTipiId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaTipi__donemTi__1920BF5C">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="odaTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaTipi__odaTipi__182C9B23">
+    <End Role="odaTipiKontenjan" Type="Self.odaTipiKontenjan" Multiplicity="0..1" />
+    <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="odaTipiKontenjan">
+        <PropertyRef Name="odaTipiKontenjanID" />
+      </Principal>
+      <Dependent Role="odaTipi">
+        <PropertyRef Name="odaTipiKontenjanID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaTipiKo__donem__15502E78">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="odaTipiKontenjan" Type="Self.odaTipiKontenjan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="odaTipiKontenjan">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ogrenci__donemTi__239E4DCF">
+    <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
+    <End Role="ogrenci" Type="Self.ogrenci" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="donemTipi">
+        <PropertyRef Name="donemTipiID" />
+      </Principal>
+      <Dependent Role="ogrenci">
+        <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="YurtDBModelStoreContainer">
+    <EntitySet Name="Donem" EntityType="Self.Donem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="donemTipi" EntityType="Self.donemTipi" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="evrakTipi" EntityType="Self.evrakTipi" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="indirimler" EntityType="Self.indirimler" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Kayıt" EntityType="Self.Kayıt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="odaFiyatlari" EntityType="Self.odaFiyatlari" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="odaTipi" EntityType="Self.odaTipi" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="odaTipiKontenjan" EntityType="Self.odaTipiKontenjan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ogrenci" EntityType="Self.ogrenci" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Donem__donemTipi__1273C1CD" Association="Self.FK__Donem__donemTipi__1273C1CD">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="Donem" EntitySet="Donem" />
+    </AssociationSet>
+    <AssociationSet Name="FK__evrakBilg__donem__2B3F6F97" Association="Self.FK__evrakBilg__donem__2B3F6F97">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
+    </AssociationSet>
+    <AssociationSet Name="FK__evrakBilg__evrak__29572725" Association="Self.FK__evrakBilg__evrak__29572725">
+      <End Role="evrakTipi" EntitySet="evrakTipi" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
+    </AssociationSet>
+    <AssociationSet Name="FK__evrakBilg__ogren__2A4B4B5E" Association="Self.FK__evrakBilg__ogren__2A4B4B5E">
+      <End Role="ogrenci" EntitySet="ogrenci" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
+    </AssociationSet>
+    <AssociationSet Name="FK__evrakTipi__donem__267ABA7A" Association="Self.FK__evrakTipi__donem__267ABA7A">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="evrakTipi" EntitySet="evrakTipi" />
+    </AssociationSet>
+    <AssociationSet Name="FK__indirimle__donem__1BFD2C07" Association="Self.FK__indirimle__donem__1BFD2C07">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="indirimler" EntitySet="indirimler" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kayıt__donemTipi__2F10007B" Association="Self.FK__Kayıt__donemTipi__2F10007B">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="Kayıt" EntitySet="Kayıt" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kayıt__odaBilgil__2E1BDC42" Association="Self.FK__Kayıt__odaBilgil__2E1BDC42">
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+      <End Role="Kayıt" EntitySet="Kayıt" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaFiyatl__donem__20C1E124" Association="Self.FK__odaFiyatl__donem__20C1E124">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaFiyatl__indir__1FCDBCEB" Association="Self.FK__odaFiyatl__indir__1FCDBCEB">
+      <End Role="indirimler" EntitySet="indirimler" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaFiyatl__odaTi__1ED998B2" Association="Self.FK__odaFiyatl__odaTi__1ED998B2">
+      <End Role="odaTipi" EntitySet="odaTipi" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaTipi__donemTi__1920BF5C" Association="Self.FK__odaTipi__donemTi__1920BF5C">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaTipi" EntitySet="odaTipi" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaTipi__odaTipi__182C9B23" Association="Self.FK__odaTipi__odaTipi__182C9B23">
+      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
+      <End Role="odaTipi" EntitySet="odaTipi" />
+    </AssociationSet>
+    <AssociationSet Name="FK__odaTipiKo__donem__15502E78" Association="Self.FK__odaTipiKo__donem__15502E78">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ogrenci__donemTi__239E4DCF" Association="Self.FK__ogrenci__donemTi__239E4DCF">
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="ogrenci" EntitySet="ogrenci" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

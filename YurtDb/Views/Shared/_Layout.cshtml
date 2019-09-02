@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script>
+    $(".adimBtn").removeClass("btn-primary");
+    $(".adimBtn").removeClass("btn-outline-primary");
+    var adim = @Model.basvuruAdimi;
+        $("#adim" + @Model.basvuruAdimi+"").addClass("btn-primary");
+        for (var i = 0; i < 6; i++)
+            if(i!=@Model.basvuruAdimi)
+            $("#adim" + i+"").addClass("btn-outline-primary");
+    </script>
+
+
+
+    <script>
+        $(document).ready(function(){
+
+                    /*   Combobox   */
+        let dropdown = $('#odaTipleri');
+
+        dropdown.empty();
+
+        dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
+        dropdown.prop('selectedIndex', 0);
+
+        const url = '@Url.Action("getRooms", "Home")';
+        console.log(url);
+        // Populate dropdown with list of provinces
+        $.getJSON(url, function (data) {
+            $.each(data, function (key, entry) {
+                dropdown.append($('<option></option>').attr('value', entry.odaTipiID).text(entry.adi));
+            })
+        });
+
+
+
+    
+
+
+        let indirimler = $('#indirimTipleri');
+
+        indirimler.empty();
+
+
+
+
+        var id = $("#odaTipleri").val();
+        const url2 = '@Url.Action("indirimler", "Home")';
+        // Populate dropdown with list of provinces
+        $.getJSON(url2, function (data) {
+            $.each(data, function (key, entry) {
+                indirimler.append($('<option></option>').attr('value', entry.indirimlerID).text(entry.aciklama));
+                if (entry.indirimId == 1)
+                    $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
+                console.log(entry.indirimId);
+            })
+            indirimler.prop('selectedIndex', 0);
+        });
+
+        });
+
+        
+        function odaTipleriComboboxChange() {
+            
+             $('#öncelikCombobox').css('visibility', 'visible');
+             const url = '@Url.Action("getPrice", "Home")' + "?odaTipiID=" + $("#odaTipleri").val() + "&indirimID=" + $("#indirimTipleri").val();
+             console.log(url);
+                 $.getJSON(url, function (data) {
+                     $.each(data, function (key, entry) {
+                         $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
+                         console.log("fiyat:" + entry.fiyat);
+                     })
+                 });
+                
+            
+            
+        }
+                
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a83ad3644a5f4a39873e4cf37049e5d8" Name="Diagram1">
+        <EntityTypeShape EntityType="YurtDBModel.Donem" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.donemTipi" Width="1.5" PointX="0.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.evrakBilgileri" Width="1.5" PointX="5.25" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.evrakTipi" Width="1.5" PointX="3" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.indirimler" Width="1.5" PointX="3" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.Kayıt" Width="1.5" PointX="7.5" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.odaFiyatlari" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.odaTipi" Width="1.5" PointX="8.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.odaTipiKontenjan" Width="1.5" PointX="3" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.ogrenci" Width="1.5" PointX="3" PointY="25.125" IsExpanded="true" />
+        <AssociationConnector Association="YurtDBModel.FK__Donem__donemTipi__1273C1CD" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__evrakBilg__donem__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__evrakTipi__donem__267ABA7A" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__indirimle__donem__1BFD2C07" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__Kayıt__donemTipi__2F10007B" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaFiyatl__donem__20C1E124" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaTipi__donemTi__1920BF5C" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaTipiKo__donem__15502E78" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__ogrenci__donemTi__239E4DCF" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__evrakBilg__evrak__29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__evrakBilg__ogren__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaFiyatl__indir__1FCDBCEB" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__Kayıt__odaBilgil__2E1BDC42" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaFiyatl__odaTi__1ED998B2" ManuallyRouted="false" />
+        <AssociationConnector Association="YurtDBModel.FK__odaTipi__odaTipi__182C9B23" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="YurtDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="YurtDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Donem">
     <Key>
       <PropertyRef Name="id" />
@@ -76,8 +76,6 @@
     </Key>
     <Property Name="odaTipiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="adi" Type="varchar" MaxLength="50" />
-    <Property Name="odaKontenjan" Type="int" />
-    <Property Name="odaTipiKontenjanID" Type="int" />
     <Property Name="donemTipiID" Type="int" />
   </EntityType>
   <EntityType Name="odaTipiKontenjan">
@@ -88,6 +86,7 @@
     <Property Name="erkekKontenjan" Type="int" />
     <Property Name="kizKontenjan" Type="int" />
     <Property Name="toplam" Type="int" />
+    <Property Name="odaTipiID" Type="int" />
     <Property Name="donemTipiID" Type="int" />
   </EntityType>
   <EntityType Name="ogrenci">
@@ -102,6 +101,7 @@
     <Property Name="fakulteNo" Type="varchar" MaxLength="50" />
     <Property Name="bolumNo" Type="varchar" MaxLength="50" />
     <Property Name="donemTipiID" Type="int" />
+    <Property Name="cinsiyet" Type="varchar" MaxLength="5" />
   </EntityType>
   <Association Name="FK__Donem__donemTipi__1273C1CD">
     <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
@@ -235,7 +235,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__odaTipi__donemTi__1920BF5C">
+  <Association Name="FK__odaTipi__donemTi__15502E78">
     <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
     <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="*" />
     <ReferentialConstraint>
@@ -247,19 +247,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__odaTipi__odaTipi__182C9B23">
-    <End Role="odaTipiKontenjan" Type="Self.odaTipiKontenjan" Multiplicity="0..1" />
-    <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="odaTipiKontenjan">
-        <PropertyRef Name="odaTipiKontenjanID" />
-      </Principal>
-      <Dependent Role="odaTipi">
-        <PropertyRef Name="odaTipiKontenjanID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__odaTipiKo__donem__15502E78">
+  <Association Name="FK__odaTipiKo__donem__1920BF5C">
     <End Role="donemTipi" Type="Self.donemTipi" Multiplicity="0..1" />
     <End Role="odaTipiKontenjan" Type="Self.odaTipiKontenjan" Multiplicity="*" />
     <ReferentialConstraint>
@@ -268,6 +256,18 @@
       </Principal>
       <Dependent Role="odaTipiKontenjan">
         <PropertyRef Name="donemTipiID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__odaTipiKo__odaTi__182C9B23">
+    <End Role="odaTipi" Type="Self.odaTipi" Multiplicity="0..1" />
+    <End Role="odaTipiKontenjan" Type="Self.odaTipiKontenjan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="odaTipi">
+        <PropertyRef Name="odaTipiID" />
+      </Principal>
+      <Dependent Role="odaTipiKontenjan">
+        <PropertyRef Name="odaTipiID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -283,7 +283,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="YurtDBModelStoreContainer">
+  <EntityContainer Name="YurtDatabaseModelStoreContainer">
     <EntitySet Name="Donem" EntityType="Self.Donem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="donemTipi" EntityType="Self.donemTipi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" Schema="dbo" store:Type="Tables" />
@@ -338,16 +338,16 @@
       <End Role="odaTipi" EntitySet="odaTipi" />
       <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
     </AssociationSet>
-    <AssociationSet Name="FK__odaTipi__donemTi__1920BF5C" Association="Self.FK__odaTipi__donemTi__1920BF5C">
+    <AssociationSet Name="FK__odaTipi__donemTi__15502E78" Association="Self.FK__odaTipi__donemTi__15502E78">
       <End Role="donemTipi" EntitySet="donemTipi" />
       <End Role="odaTipi" EntitySet="odaTipi" />
     </AssociationSet>
-    <AssociationSet Name="FK__odaTipi__odaTipi__182C9B23" Association="Self.FK__odaTipi__odaTipi__182C9B23">
+    <AssociationSet Name="FK__odaTipiKo__donem__1920BF5C" Association="Self.FK__odaTipiKo__donem__1920BF5C">
+      <End Role="donemTipi" EntitySet="donemTipi" />
       <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
-      <End Role="odaTipi" EntitySet="odaTipi" />
     </AssociationSet>
-    <AssociationSet Name="FK__odaTipiKo__donem__15502E78" Association="Self.FK__odaTipiKo__donem__15502E78">
-      <End Role="donemTipi" EntitySet="donemTipi" />
+    <AssociationSet Name="FK__odaTipiKo__odaTi__182C9B23" Association="Self.FK__odaTipiKo__odaTi__182C9B23">
+      <End Role="odaTipi" EntitySet="odaTipi" />
       <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
     </AssociationSet>
     <AssociationSet Name="FK__ogrenci__donemTi__239E4DCF" Association="Self.FK__ogrenci__donemTi__239E4DCF">

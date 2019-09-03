@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="YurtDBModelStoreContainer" CdmEntityContainer="YurtDBEntities">
-    <EntitySetMapping Name="Donem">
-      <EntityTypeMapping TypeName="YurtDBModel.Donem">
+  <EntityContainerMapping StorageEntityContainer="YurtDatabaseModelStoreContainer" CdmEntityContainer="YurtDatabaseEntities">
+    <EntitySetMapping Name="Donems">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.Donem">
         <MappingFragment StoreEntitySet="Donem">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="baslangicTarihi" ColumnName="baslangicTarihi" />
@@ -15,16 +15,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="donemTipi">
-      <EntityTypeMapping TypeName="YurtDBModel.donemTipi">
+    <EntitySetMapping Name="donemTipis">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.donemTipi">
         <MappingFragment StoreEntitySet="donemTipi">
           <ScalarProperty Name="donemTipiID" ColumnName="donemTipiID" />
           <ScalarProperty Name="adi" ColumnName="adi" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="evrakBilgileri">
-      <EntityTypeMapping TypeName="YurtDBModel.evrakBilgileri">
+    <EntitySetMapping Name="evrakBilgileris">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.evrakBilgileri">
         <MappingFragment StoreEntitySet="evrakBilgileri">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="evrakTipiID" ColumnName="evrakTipiID" />
@@ -34,8 +34,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="evrakTipi">
-      <EntityTypeMapping TypeName="YurtDBModel.evrakTipi">
+    <EntitySetMapping Name="evrakTipis">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.evrakTipi">
         <MappingFragment StoreEntitySet="evrakTipi">
           <ScalarProperty Name="evrakTipiID" ColumnName="evrakTipiID" />
           <ScalarProperty Name="adi" ColumnName="adi" />
@@ -46,8 +46,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="indirimler">
-      <EntityTypeMapping TypeName="YurtDBModel.indirimler">
+    <EntitySetMapping Name="indirimlers">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.indirimler">
         <MappingFragment StoreEntitySet="indirimler">
           <ScalarProperty Name="indirimlerID" ColumnName="indirimlerID" />
           <ScalarProperty Name="aciklama" ColumnName="aciklama" />
@@ -57,7 +57,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Kayıt">
-      <EntityTypeMapping TypeName="YurtDBModel.Kayıt">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.Kayıt">
         <MappingFragment StoreEntitySet="Kayıt">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="ogrenciNo" ColumnName="ogrenciNo" />
@@ -66,8 +66,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="odaFiyatlari">
-      <EntityTypeMapping TypeName="YurtDBModel.odaFiyatlari">
+    <EntitySetMapping Name="odaFiyatlaris">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.odaFiyatlari">
         <MappingFragment StoreEntitySet="odaFiyatlari">
           <ScalarProperty Name="odaFiyatlariID" ColumnName="odaFiyatlariID" />
           <ScalarProperty Name="aciklama" ColumnName="aciklama" />
@@ -78,31 +78,31 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="odaTipi">
-      <EntityTypeMapping TypeName="YurtDBModel.odaTipi">
+    <EntitySetMapping Name="odaTipis">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.odaTipi">
         <MappingFragment StoreEntitySet="odaTipi">
           <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
           <ScalarProperty Name="adi" ColumnName="adi" />
-          <ScalarProperty Name="odaKontenjan" ColumnName="odaKontenjan" />
-          <ScalarProperty Name="odaTipiKontenjanID" ColumnName="odaTipiKontenjanID" />
           <ScalarProperty Name="donemTipiID" ColumnName="donemTipiID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="odaTipiKontenjan">
-      <EntityTypeMapping TypeName="YurtDBModel.odaTipiKontenjan">
+    <EntitySetMapping Name="odaTipiKontenjans">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.odaTipiKontenjan">
         <MappingFragment StoreEntitySet="odaTipiKontenjan">
           <ScalarProperty Name="odaTipiKontenjanID" ColumnName="odaTipiKontenjanID" />
           <ScalarProperty Name="erkekKontenjan" ColumnName="erkekKontenjan" />
           <ScalarProperty Name="kizKontenjan" ColumnName="kizKontenjan" />
           <ScalarProperty Name="toplam" ColumnName="toplam" />
+          <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
           <ScalarProperty Name="donemTipiID" ColumnName="donemTipiID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ogrenci">
-      <EntityTypeMapping TypeName="YurtDBModel.ogrenci">
+    <EntitySetMapping Name="ogrencis">
+      <EntityTypeMapping TypeName="YurtDatabaseModel.ogrenci">
         <MappingFragment StoreEntitySet="ogrenci">
+          <ScalarProperty Name="cinsiyet" ColumnName="cinsiyet" />
           <ScalarProperty Name="ogrenciNo" ColumnName="ogrenciNo" />
           <ScalarProperty Name="tcNo" ColumnName="tcNo" />
           <ScalarProperty Name="adi" ColumnName="adi" />

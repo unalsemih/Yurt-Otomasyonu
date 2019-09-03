@@ -17,37 +17,37 @@ namespace YurtDb.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public donemTipi()
         {
-            this.Donem = new HashSet<Donem>();
-            this.evrakBilgileri = new HashSet<evrakBilgileri>();
-            this.evrakTipi = new HashSet<evrakTipi>();
-            this.indirimler = new HashSet<indirimler>();
+            this.Donems = new HashSet<Donem>();
+            this.evrakBilgileris = new HashSet<evrakBilgileri>();
+            this.evrakTipis = new HashSet<evrakTipi>();
+            this.indirimlers = new HashSet<indirimler>();
             this.Kayıt = new HashSet<Kayıt>();
-            this.odaFiyatlari = new HashSet<odaFiyatlari>();
-            this.odaTipi = new HashSet<odaTipi>();
-            this.odaTipiKontenjan = new HashSet<odaTipiKontenjan>();
-            this.ogrenci = new HashSet<ogrenci>();
+            this.odaFiyatlaris = new HashSet<odaFiyatlari>();
+            this.odaTipis = new HashSet<odaTipi>();
+            this.odaTipiKontenjans = new HashSet<odaTipiKontenjan>();
+            this.ogrencis = new HashSet<ogrenci>();
         }
     
         public int donemTipiID { get; set; }
         public string adi { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Donem> Donem { get; set; }
+        public virtual ICollection<Donem> Donems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<evrakBilgileri> evrakBilgileri { get; set; }
+        public virtual ICollection<evrakBilgileri> evrakBilgileris { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<evrakTipi> evrakTipi { get; set; }
+        public virtual ICollection<evrakTipi> evrakTipis { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<indirimler> indirimler { get; set; }
+        public virtual ICollection<indirimler> indirimlers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Kayıt> Kayıt { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<odaFiyatlari> odaFiyatlari { get; set; }
+        public virtual ICollection<odaFiyatlari> odaFiyatlaris { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<odaTipi> odaTipi { get; set; }
+        public virtual ICollection<odaTipi> odaTipis { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<odaTipiKontenjan> odaTipiKontenjan { get; set; }
+        public virtual ICollection<odaTipiKontenjan> odaTipiKontenjans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ogrenci> ogrenci { get; set; }
+        public virtual ICollection<ogrenci> ogrencis { get; set; }
     }
 }

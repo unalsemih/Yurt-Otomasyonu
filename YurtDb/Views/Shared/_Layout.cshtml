@@ -13,10 +13,8 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
+        <footer></footer>
     </div>
 
 
@@ -24,15 +22,32 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
 
     <script>
-    $(".adimBtn").removeClass("btn-primary");
+       @if (false) {
+    /*$(".adimBtn").removeClass("btn-primary");
     $(".adimBtn").removeClass("btn-outline-primary");
-    var adim = @Model.basvuruAdimi;
+
+           var adim = @Model.basvuruAdimi;
         $("#adim" + @Model.basvuruAdimi+"").addClass("btn-primary");
         for (var i = 0; i < 6; i++)
             if(i!=@Model.basvuruAdimi)
             $("#adim" + i+"").addClass("btn-outline-primary");
+    */
+      }
     </script>
 
+
+    <script>
+    $(".adimBtn").removeClass("btn-primary");
+    $(".adimBtn").removeClass("btn-outline-primary");
+    var adim = @Model.basvuruAdimi;
+        $(".adimBtn").addClass("btn-primary");
+        for (var i = 0; i < 6; i++)
+            if (i >@Model.basvuruAdimi)
+            {
+                $("#adim" + i + "").removeClass("btn-primary");
+                $("#adim" + i + "").addClass("btn-outline-primary");
+            }
+    </script>
 
 
     <script>
@@ -57,7 +72,7 @@
 
 
 
-    
+
 
 
         let indirimler = $('#indirimTipleri');
@@ -80,25 +95,95 @@
             indirimler.prop('selectedIndex', 0);
         });
 
+
+
+
+        $(".inputDocument").click(function () {
+
+            var input = $(this).next().next().click();
+
         });
 
-        
-        function odaTipleriComboboxChange() {
-            
-             $('#öncelikCombobox').css('visibility', 'visible');
-             const url = '@Url.Action("getPrice", "Home")' + "?odaTipiID=" + $("#odaTipleri").val() + "&indirimID=" + $("#indirimTipleri").val();
-             console.log(url);
-                 $.getJSON(url, function (data) {
-                     $.each(data, function (key, entry) {
-                         $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
-                         console.log("fiyat:" + entry.fiyat);
-                     })
-                 });
-                
-            
-            
-        }
-                
+
+
+
+        $("#sorgulaBtn").click(function(){
+            if($("#tcNo").val().length !=11)
+            {
+                alert("TC giriniz!");
+            }
+            else{
+               let dropdown = $('#egitimTipleri');
+
+            dropdown.empty();
+             dropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
+            const url2 = '@Url.Action("tcOgrenciSorgulama", "Home")'+"?tcNo=" + $("#tcNo").val().toString();
+            // Populate dropdown with list of provinces
+
+            $.getJSON(url2, function (data) {
+             var count = Object.keys(data).length;
+             if(count>1){
+            $.each(data, function (key, entry) {
+
+                dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
+
+
+            })
+            dropdown.prop('selectedIndex', 0);
+                $("#ogrenciCombobox").css("display","block");
+                $("#tcNo").attr("readonly","readonly");
+           //     $("#nextBtn").css("display","block");
+                $("#sorgulaBtn").css("display","none");
+             }
+             else if(count==1)
+             {
+                $("#nextBtn").click();
+             }
+        });
+                }
+              });
+
+
+            $(".adimBtn").click(function (){
+               
+                const url2 =  '@Url.Action("changeForm", "Home")'+"?number=" + $(this).attr("number").toString();
+                window.location = url2;
+
+            });
+
+
+    });
+
+    function egitimTipleriChange(){
+       $("#nextBtn").css("display","block");
+    }
+
+
+    function odaTipleriComboboxChange() {
+
+    $('#öncelikCombobox').css('visibility', 'visible');
+    const url = '@Url.Action("getPrice", "Home")' + "?odaTipiID=" + $("#odaTipleri").val() + "&indirimID=" + $("#indirimTipleri").val();
+    console.log(url);
+    $.getJSON(url, function (data) {
+    $.each(data, function (key, entry) {
+    $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
+    console.log("fiyat:" + entry.fiyat);
+    })
+    });
+
+
+
+    }
+
+        $( ".fileInput" ).change(function(e) {
+       var fileName = e.target.files[0].name;
+          $(this).prev().text(" 1 dosya seçildi -- "+fileName );
+
+            $("#"+$(this).attr("submitID")).removeClass("disabled");
+        });
+
+
+
 
     </script>
 </body>

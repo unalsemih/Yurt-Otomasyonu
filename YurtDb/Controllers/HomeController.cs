@@ -6,17 +6,19 @@ using System.Web.Mvc;
 using YurtDb.Models;
 using YurtDb.DB;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace YurtDb.Controllers
 {
     public class HomeController : Controller
     {
-        DB.YurtDBEntities context;
+        DB.YurtDatabaseEntities context;
         static BasvuruFormu basvuruFormu;
         int basvuruAdimi=0;
+        int sayfaYonlendirme = -1; // Default olarak -1 olacak..
         public HomeController()
         {
-            context = new YurtDBEntities();
+            context = new YurtDatabaseEntities();
         }
 
 
@@ -29,29 +31,76 @@ namespace YurtDb.Controllers
                 basvuruFormu = new BasvuruFormu();
                 basvuruFormu.basvuruAdimi = 0;
             }
-            System.Diagnostics.Debug.WriteLine("Basvuru Adimi ilk : " + basvuruFormu.basvuruAdimi);
-            basvuruAdimiGuncelle();
-            System.Diagnostics.Debug.WriteLine("Basvuru Adimi Son : " + basvuruFormu.basvuruAdimi);
+            //   System.Diagnostics.Debug.WriteLine("Basvuru Adimi ilk : " + basvuruFormu.basvuruAdimi);
+            if (sayfaYonlendirme != -1)
+            {
+                basvuruFormu.sayfaYonlendirme = sayfaYonlendirme;
+                sayfaYonlendirme = -1;
+            }
+            else
+                basvuruAdimiGuncelle();
+                
+
+
+            //    System.Diagnostics.Debug.WriteLine("Basvuru Adimi Son : " + basvuruFormu.basvuruAdimi);
             return View(basvuruFormu);
             
         }
 
+
+
+
+
+        [HttpGet]
+        public ActionResult changeForm(int number)
+        {
+            sayfaYonlendirme = number;
+            System.Diagnostics.Debug.WriteLine("nuumber" + sayfaYonlendirme);
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+        [HttpPost]
+        public ActionResult ogrenciBelgesiUpload(HttpPostedFileBase file)
+        {
+            if (file.ContentLength > 0)
+            {
+                //var fileName = Path.GetFileName(file.FileName);
+                var fileName = basvuruFormu.ogrenciBilgileri.tcNo + basvuruFormu.ogrenciBilgileri.adi + basvuruFormu.ogrenciBilgileri.soyadi + "OgrenciBelgesi";
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                file.SaveAs(path);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
         [HttpPost]
         public ActionResult girisKontrol(BasvuruFormu basvuru)
         {
+            
             //Kullanıcı TC NO girdiğinde...
-            System.Diagnostics.Debug.WriteLine("giris"+basvuru.tcNo);
+            System.Diagnostics.Debug.WriteLine("giris"+basvuru.tcNo + "egitimDurumu:"+basvuru.egitimDurumu);
             basvuruFormu.tcNo = basvuru.tcNo;
-
-            //Tc 
+            basvuruFormu.egitimDurumu = basvuru.egitimDurumu;//Egitim Durumu ve tc no alındı. statik değişkene...
+            
             if (basvuruFormu.tcNo != 0)
             {
-                DB.ogrenci ogrenci = context.ogrenci.First(o => o.tcNo == basvuruFormu.tcNo);
+                DB.ogrenci ogrenci = context.ogrencis.First(o => o.tcNo == basvuruFormu.tcNo);
                 if (ogrenci != null)
                     basvuruFormu.ogrenciBilgileri = ogrenci;
             }
            
             return RedirectToAction("Index");
+            
         }
 
 
@@ -80,9 +129,10 @@ namespace YurtDb.Controllers
         {
             //Ogrenci Bilgileri kısmında devam et butonu clicklendiğinde buraya gelinecek ... 
 
-            System.Diagnostics.Debug.WriteLine("odakontrol");
-
-
+            System.Diagnostics.Debug.WriteLine("odakontrol + odatiipId"+basvuru.odaBilgileri.odaTipiId);
+            System.Diagnostics.Debug.WriteLine("odakontrol + indirimId" + basvuru.odaBilgileri.indirimId);
+            basvuruFormu.odaBilgileri.odaTipiId = basvuru.odaBilgileri.odaTipiId;
+            basvuruFormu.odaBilgileri.indirimId = basvuru.odaBilgileri.indirimId;
             //Kontrol aşaması bittikten sonra
             basvuruFormu.evrakBilgileri = new evrakBilgileri();
            
@@ -109,7 +159,7 @@ namespace YurtDb.Controllers
         public ActionResult getRooms()
         {
            // var odaFiyati = context.odaFiyatlari.Where(p => p.indirimId == 1);
-            var odaTipleri = context.odaTipi
+            var odaTipleri = context.odaTipis
                             .Select(p => new { p.odaTipiID, p.adi});
             
             var jsonData = Json(odaTipleri, JsonRequestBehavior.AllowGet);
@@ -121,7 +171,7 @@ namespace YurtDb.Controllers
         [HttpGet]
         public ActionResult getPrices(int id)
         {
-             var odaFiyatBilgileri = context.odaFiyatlari.Where(x=>x.odaTipiId == id)
+             var odaFiyatBilgileri = context.odaFiyatlaris.Where(x=>x.odaTipiId == id)
                             .Select(p => new { p.indirimId, p.aciklama, p.fiyat });
            
 
@@ -133,7 +183,7 @@ namespace YurtDb.Controllers
         [HttpGet]
         public ActionResult indirimler()
         {
-            var indirimler = context.indirimler.Select(p => new { p.indirimlerID, p.aciklama, p.indirimOrani});
+            var indirimler = context.indirimlers.Select(p => new { p.indirimlerID, p.aciklama, p.indirimOrani});
             var jsonData = Json(indirimler, JsonRequestBehavior.AllowGet);
             return jsonData;
         }
@@ -141,7 +191,7 @@ namespace YurtDb.Controllers
         [HttpGet]
         public ActionResult getPrice(int odaTipiID,int indirimID)
         {
-            var odaFiyatBilgisi = context.odaFiyatlari.Where(x => x.odaTipiId == odaTipiID && x.indirimId == indirimID)
+            var odaFiyatBilgisi = context.odaFiyatlaris.Where(x => x.odaTipiId == odaTipiID && x.indirimId == indirimID)
                            .Select(p => new { p.indirimId, p.aciklama, p.fiyat });
 
 
@@ -149,6 +199,18 @@ namespace YurtDb.Controllers
             return jsonData;
         }
 
+        [HttpGet]
+        public ActionResult tcOgrenciSorgulama(long tcNo)
+        {
+
+            System.Diagnostics.Debug.WriteLine(""+tcNo);
+            var ogrenci = context.ogrencis.Where(x => x.tcNo == tcNo)
+                           .Select(p => new { p.egitimDurumu,p.ogrenciNo});
+
+
+            var jsonData = Json(ogrenci, JsonRequestBehavior.AllowGet);
+            return jsonData;
+        }
 
 
     }

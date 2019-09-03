@@ -3,29 +3,42 @@
 
 <div class="container">
     <div class="col-md-12 text-center">
-        <button type="button" class="btn btn-primary adimBtn" id="adim0">Giriş</button>
-        <button type="button" class="btn btn-outline-primary adimBtn" id="adim1">Öğrenci Bilgileri (1.Adım)</button>
-        <button type="button" class="btn btn-outline-primary adimBtn" id="adim2">Oda Bilgileri (2.Adım)</button>
-        <button type="button" class="btn btn-outline-primary adimBtn" id="adim3">İndirim ve Evraklar (3.Adım)</button>
-        <button type="button" class="btn btn-outline-primary adimBtn" id="adim4">Ek Alanlar (4.Adım)</button>
-        <button type="button" class="btn btn-outline-primary adimBtn" id="adim5">Kayıt İşlemi (5.Adım)</button>
+        <button type="button" class="btn btn-primary adimBtn" id="adim0" number="0">Giriş</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim1" number="1">Öğrenci Bilgileri (1.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim2" number="2">Oda Bilgileri (2.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim3" number="3">İndirim ve Evraklar (3.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim4" number="4">Ek Alanlar (4.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim5" number="5">Kayıt İşlemi (5.Adım)</button>
     </div>
 </div>
 @if (Model.basvuruAdimi == 0)
 {
-    <div class="offset-md-4 mt-4 col-md-4">
-        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 18rem;">
+    <div class="offset-md-4 mt-4 col-md-4 col-sm-12">
+        <div class="card shadow p-3 mb-5 bg-white rounded">
             <div class="card-body">
                 @using (Html.BeginForm("girisKontrol", "Home", FormMethod.Post))
-                {
-                    <div class="form-group">
-                        <label for="Numara">TC No</label>
-                        @Html.EditorFor(model => model.tcNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Öğrenci Numaranız", type = "text", minLenght = "11", maxlength = "11" } })
-                    </div>
-                    <div class="form-group text-center ">
-                        <button class="btn btn-success ">Devam Et</button>
-                    </div>
-                }
+    {
+            <div class="form-group">
+                <label for="Numara">TC No</label>
+                @Html.EditorFor(model => model.tcNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Öğrenci Numaranız", type = "text", minLenght = "11", maxlength = "11" } })
+            </div>
+            <div class="form-group text-center ">
+                <button type="button" class="btn btn-success btn-sm " id="sorgulaBtn">Sorgula</button>
+            </div>
+
+
+            <div class="form-group" id="ogrenciCombobox" style="display:none;">
+                <label for="inputState">Seçim Yapınız</label>
+                @Html.DropDownList("egitimDurumu", new List<SelectListItem>
+           {}, htmlAttributes: new { @class = "form-control", @id = "egitimTipleri", @onchange = "egitimTipleriChange()" })
+            </div>
+            
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-outline-success btn-sm " id="nextBtn" style="display:none; margin:auto;">Devam Et</button>
+                </div>
+            </div>
+}
             </div>
         </div>
 
@@ -109,17 +122,18 @@ else if (Model.basvuruAdimi == 2)
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="inputState">Oda Tipi</label>
-                                <select id="odaTipleri" class="form-control" onchange="odaTipleriComboboxChange()">
-                                    <option selected></option>
-                                </select>
+                                @Html.DropDownListFor(model=>model.odaBilgileri.odaTipiId, new List<SelectListItem>
+    { }, htmlAttributes: new { @class = "form-control", @id = "odaTipleri", @onchange = "odaTipleriComboboxChange()" })
+                               
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group" id="öncelikCombobox" style="visibility:hidden;">
                                 <label for="inputState">Öncelik Durumu</label>
-                                <select id="indirimTipleri" class="form-control" onchange="odaTipleriComboboxChange()">
-                                    <option selected></option>
-                                </select>
+
+                                @Html.DropDownListFor(model => model.odaBilgileri.indirimId, new List<SelectListItem>
+    { }, htmlAttributes: new { @class = "form-control", @id = "indirimTipleri", @onchange = "odaTipleriComboboxChange()" })
+                               
                             </div>
                         </div>
                     </div>
@@ -143,61 +157,94 @@ else if (Model.basvuruAdimi == 2)
 else if (Model.basvuruAdimi == 3)
 {
     <div class="offset-md-3 mt-4 col-md-6">
-        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 37rem;">
-            <div class="card-body">
+        <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+            <div class="card-body p-2">
+                @using (Html.BeginForm("ogrenciBelgesiUpload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+
+                    <div class="col-md-12 mb-4 text-center">
+                        <h5>Öğrenci Belgesi</h5>
+                        <hr />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 pl-5">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-sm inputDocument">Dosya Seç</button><span class="text-danger"> Dosya Seçilmedi</span>
+                                <input type="file" name="file" class="form-control-file fileInput" id="fileInput" style="display:none" submitId="submit1" accept="application/pdf,application/vnd.ms-excel">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="form-group text-center " style="margin-bottom:4px;">
+                        <input type="submit" class="btn btn-success btn-sm disabled" id="submit1" value="Dosyayı Yükle" />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+            <div class="card-body p-2">
                 @using (Html.BeginForm("ogrenciBilgileriKontrol", "Home", FormMethod.Post))
                 {
                     <div class="col-md-12 mb-4 text-center">
-                        <h5>Evrak Bilgileri</h5>
+                        <h5>Adli Sicil Belgesi</h5>
+                        <hr />
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Ad</label>
-                                @Html.EditorFor(model => model.ogrenciBilgileri.adi, new { htmlAttributes = new { @class = "form-control", placeholder = "Adı", type = "text" } })
 
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Soyad</label>
-                                @Html.EditorFor(model => model.ogrenciBilgileri.soyadi, new { htmlAttributes = new { @class = "form-control", placeholder = "Soyadı", type = "text" } })
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12 pl-5">
                             <div class="form-group">
-                                <label for="formGroupExampleInput">TC Kimlik No</label>
-                                @Html.EditorFor(model => model.ogrenciBilgileri.tcNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Tc", type = "text" } })
+                                <button type="button" class="btn btn-primary btn-sm inputDocument">Dosya Seç</button><span class="text-danger"> Dosya Seçilmedi</span>
+                                <input type="file" class="form-control-file fileInput" id="fileInput" style="display:none" accept="application/pdf,application/vnd.ms-excel">
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Öğrenci No</label>
-                                @Html.EditorFor(model => model.ogrenciBilgileri.ogrenciNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Öğrenci No", type = "text" } })
 
-                            </div>
-                        </div>
                     </div>
-                    <!--
+
+
+
+
+                    <div class="form-group text-center " style="margin-bottom:4px;">
+                        <input type="submit" class="btn btn-success btn-sm disabled" value="Dosyayı Yükle" />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+            <div class="card-body p-2">
+                @using (Html.BeginForm("ogrenciBilgileriKontrol", "Home", FormMethod.Post))
+                {
+                    <div class="col-md-12 mb-4 text-center">
+                        <h5>Öncelik Belgesi</h5>
+                        <hr />
+                    </div>
+
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="Fakülte">Fakülte</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
-                            </div>
+                        <div class="col-md-12 pl-5">
+
+                            <button type="button" class="btn btn-primary btn-sm inputDocument">Dosya Seç</button><span class="text-danger"> Dosya Seçilmedi</span>
+                            <input type="file" class="form-control-file fileInput" id="fileInput" style="display:none" accept="application/pdf,application/vnd.ms-excel">
+
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="Bölüm">Bölüm</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
-                            </div>
-                        </div>
+
                     </div>
-                        -->
-                    <div class="form-group text-center ">
-                        <input type="submit" class="btn btn-success " value="Devam Et" />
+
+
+
+
+                    <div class="form-group text-center " style="margin-bottom:4px;">
+                        <input type="submit" class="btn btn-success btn-sm disabled" value="Dosyayı Yükle" />
                     </div>
                 }
             </div>
@@ -205,5 +252,15 @@ else if (Model.basvuruAdimi == 3)
 
     </div>
 }
+
+
+<script>
+        /* document.getElementById('fileInput').onchange = function () {
+             alert('Selected file: ' + this.value);
+         }
+
+         ;**/
+
+</script>
 
 

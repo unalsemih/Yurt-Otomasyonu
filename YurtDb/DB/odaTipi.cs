@@ -17,18 +17,18 @@ namespace YurtDb.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public odaTipi()
         {
-            this.odaFiyatlari = new HashSet<odaFiyatlari>();
+            this.odaFiyatlaris = new HashSet<odaFiyatlari>();
+            this.odaTipiKontenjans = new HashSet<odaTipiKontenjan>();
         }
     
         public int odaTipiID { get; set; }
         public string adi { get; set; }
-        public Nullable<int> odaKontenjan { get; set; }
-        public Nullable<int> odaTipiKontenjanID { get; set; }
         public Nullable<int> donemTipiID { get; set; }
     
         public virtual donemTipi donemTipi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<odaFiyatlari> odaFiyatlari { get; set; }
-        public virtual odaTipiKontenjan odaTipiKontenjan { get; set; }
+        public virtual ICollection<odaFiyatlari> odaFiyatlaris { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<odaTipiKontenjan> odaTipiKontenjans { get; set; }
     }
 }

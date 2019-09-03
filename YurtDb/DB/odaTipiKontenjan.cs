@@ -14,20 +14,14 @@ namespace YurtDb.DB
     
     public partial class odaTipiKontenjan
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public odaTipiKontenjan()
-        {
-            this.odaTipi = new HashSet<odaTipi>();
-        }
-    
         public int odaTipiKontenjanID { get; set; }
         public Nullable<int> erkekKontenjan { get; set; }
         public Nullable<int> kizKontenjan { get; set; }
         public Nullable<int> toplam { get; set; }
+        public Nullable<int> odaTipiID { get; set; }
         public Nullable<int> donemTipiID { get; set; }
     
         public virtual donemTipi donemTipi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<odaTipi> odaTipi { get; set; }
+        public virtual odaTipi odaTipi { get; set; }
     }
 }

@@ -111,8 +111,15 @@ else if (Model.sayfaYonlendirme == 1 || (Model.sayfaYonlendirme == -1 && Model.b
                         </div>
                         <div class="col-md-6">
                             <div class="form-group text-right ">
+                                @if (Model.basvuruAdimi > 1)
+                                {
+                                    <input type="button" class="btn btn-success btn-sm"  onclick="$('#adim2').click();" value="İlerle" />
 
-                                <input type="submit" class="btn btn-success btn-sm" value="Devam Et" />
+                                }
+                                else
+                                {
+                                    <input type="submit" class="btn btn-success btn-sm" value="Devam Et" />
+                                }
                             </div>
                         </div>
                     </div>
@@ -170,14 +177,14 @@ else if (Model.sayfaYonlendirme == 2 || (Model.sayfaYonlendirme == -1 && Model.b
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group text-left">
-                                <button class="btn btn-success btn-sm" onclick="$('#adim1').click();">Geri Git</button>
-                            </div>
+                        <div class="col-md-6 text-left">
+                        
+                                <input type="button" class="btn btn-success btn-sm" onclick="$('#adim1').click();" value="Geri Git">
+                          
                         </div>
                         <div class="col-md-6">
                             <div id="odaSecimSubmitBtn" class="form-group text-right" style="display:none;">
-                                <button class="btn btn-success btn-sm">Devam Et</button>
+                                <input type="submit" class="btn btn-success btn-sm" value="Devam Et">
                             </div>
                         </div>
                     </div>
@@ -264,34 +271,34 @@ else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.b
 
         </div>
     }
-        <div class="offset-md-3 mt-4 col-md-6">
-            <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
-                <div class="card-body p-2">
-                    <div class="row mt-2 mb-2 p-3" id="kayitTamamlaBtn">
-                        <div class="col-md-6 text-left"><button class="btn btn-success btn-sm" onclick="$('#adim2').click();">Geri Git</button></div>
-                        <div class="col-md-6 text-right">       <button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Kaydı Tamamla</button></div>
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+            <div class="card-body p-2">
+                <div class="row mt-2 mb-2 p-3" id="kayitTamamlaBtn">
+                    <div class="col-md-6 text-left"><button class="btn btn-success btn-sm" onclick="$('#adim2').click();">Geri Git</button></div>
+                    <div class="col-md-6 text-right">       <button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Kaydı Tamamla</button></div>
 
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-                @*
-                    if (Model.yuklenenEvraklar.Count() == Model.evrakTipi.Count())
-                    {
-                        <div class="col-md-12 text-center mt-5"><button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Devam Et</button></div>
-                    }
-                *@
-                }
+    @*
+        if (Model.yuklenenEvraklar.Count() == Model.evrakTipi.Count())
+        {
+            <div class="col-md-12 text-center mt-5"><button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Devam Et</button></div>
+        }
+    *@
+}
 
 
-                <script>
-                                                            /* document.getElementById('fileInput').onchange = function () {
-                                                                 alert('Selected file: ' + this.value);
-                                                             }
+<script>
+                                                                /* document.getElementById('fileInput').onchange = function () {
+                                                                     alert('Selected file: ' + this.value);
+                                                                 }
 
-                                                             ;**/
+                                                                 ;**/
 
-                </script>
+</script>
 
 

@@ -115,7 +115,9 @@ namespace YurtDb.Controllers
         [HttpPost]
         public ActionResult girisKontrol(BasvuruFormu basvuru)
         {
-            
+            basvuruFormu = new BasvuruFormu();
+            basvuruFormu.basvuruAdimi = 0;
+
             //Kullanıcı TC NO girdiğinde...
             System.Diagnostics.Debug.WriteLine("giris"+basvuru.tcNo + "egitimDurumu:"+basvuru.egitimDurumu);
             basvuruFormu.tcNo = basvuru.tcNo;
@@ -181,9 +183,10 @@ namespace YurtDb.Controllers
                 basvuruFormu.basvuruAdimi = 3;
             else if (basvuruFormu.odaBilgileri != null)
             {
-                basvuruFormu.basvuruAdimi = 2;
-                if(sayfaYonlendirme==-1)
+                if(basvuruFormu.basvuruAdimi == 1)
                 OdaBilgileriniListele();
+                basvuruFormu.basvuruAdimi = 2;
+
             }
             else if (basvuruFormu.ogrenciBilgileri != null)
                 basvuruFormu.basvuruAdimi = 1;

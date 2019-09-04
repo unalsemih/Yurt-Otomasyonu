@@ -46,33 +46,42 @@
             {
                 $("#adim" + i + "").removeClass("btn-primary");
                 $("#adim" + i + "").addClass("btn-outline-primary");
+              
+                $("#adim" + i + "").attr("disabled","disabled");
+
             }
     </script>
 
 
     <script>
         $(document).ready(function () {
-            if ($("#öncelikCombobox").css("display") == "block")
-                 $("#odaSecimSubmitBtn").css("display", "block");
-            if ($("#öncelikCombobox").css("display") != "block")
-            $("#odaTipleri").append('<option selected="true" disabled>Oda Seçiniz</option>');
-                    /*   Combobox   */  
-       // let dropdown = $('#odaTipleri');
 
-      //  dropdown.empty();
 
-      //  dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
-      //  dropdown.prop('selectedIndex', 0);
 
-      //  const url = '@Url.Action("getRooms", "Home")';
-      //  console.log(url);
-        // Populate dropdown with list of provinces
-      /*  $.getJSON(url, function (data) {
-            $.each(data, function (key, entry) {
-                dropdown.append($('<option></option>').attr('value', entry.odaTipiID).text(entry.adi));
-            })
-        });
-*/
+
+
+
+            if ($("#öncelikCombobox").css("visibility") != "hidden")
+                $("#odaSecimSubmitBtn").css("display", "block");
+            if ($("#öncelikCombobox").css("visibility") == "hidden")
+                $("#odaTipleri").append('<option selected="true" disabled>Oda Seçiniz</option>');
+            /*   Combobox   */
+            // let dropdown = $('#odaTipleri');
+
+            //  dropdown.empty();
+
+            //  dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
+            //  dropdown.prop('selectedIndex', 0);
+
+            //  const url = '@Url.Action("getRooms", "Home")';
+            //  console.log(url);
+            // Populate dropdown with list of provinces
+            /*  $.getJSON(url, function (data) {
+                  $.each(data, function (key, entry) {
+                      dropdown.append($('<option></option>').attr('value', entry.odaTipiID).text(entry.adi));
+                  })
+              });
+      */
 
 
 
@@ -100,56 +109,94 @@
 
                 *@
 
-        $(".inputDocument").click(function () {
+            $(".inputDocument").click(function () {
 
-            var input = $(this).next().next().click();
+                var input = $(this).next().next().click();
 
-        });
-
-
+            });
 
 
-        $("#sorgulaBtn").click(function(){
-            if($("#tcNo").val().length !=11)
-            {
-                alert("TC giriniz!");
-            }
-            else{
-               let dropdown = $('#egitimTipleri');
-
-            dropdown.empty();
-             dropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
-            const url2 = '@Url.Action("tcOgrenciSorgulama", "Home")'+"?tcNo=" + $("#tcNo").val().toString();
-            // Populate dropdown with list of provinces
-
-            $.getJSON(url2, function (data) {
-             var count = Object.keys(data).length;
-             if(count>1){
-            $.each(data, function (key, entry) {
-
-                dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
 
 
-            })
-            dropdown.prop('selectedIndex', 0);
-                $("#ogrenciCombobox").css("display","block");
-                $("#tcNo").attr("readonly","readonly");
-           //     $("#nextBtn").css("display","block");
-                $("#sorgulaBtn").css("display","none");
-             }
-             else if(count==1)
-             {
-                $("#nextBtn").click();
-             }
-        });
+            $("#sorgulaBtn").click(function () {
+                if ($("#tcNo").val().length != 11) {
+                    alert("TC giriniz!");
                 }
-              });
+                else {
+                    let dropdown = $('#egitimTipleri');
+
+                    dropdown.empty();
+                    dropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
+                    const url2 = '@Url.Action("tcOgrenciSorgulama", "Home")' + "?tcNo=" + $("#tcNo").val().toString();
+                    // Populate dropdown with list of provinces
+
+                    $.getJSON(url2, function (data) {
+                        var count = Object.keys(data).length;
+                        if (count > 1) {
+                            $.each(data, function (key, entry) {
+
+                                dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
 
 
-            $(".adimBtn").click(function (){
+                            })
+                            dropdown.prop('selectedIndex', 0);
+                            $("#ogrenciCombobox").css("display", "block");
+                            $("#tcNo").attr("readonly", "readonly");
+                            //     $("#nextBtn").css("display","block");
+                            $("#sorgulaBtn").css("display", "none");
+                        }
+                        else if (count == 1) {
+                            $("#nextBtn").click();
+                        }
+                    });
+                }
+            });
 
-                const url2 =  '@Url.Action("changeForm", "Home")'+"?number=" + $(this).attr("number").toString();
+
+            $(".adimBtn").click(function () {
+
+                const url2 = '@Url.Action("changeForm", "Home")' + "?number=" + $(this).attr("number").toString();
                 window.location = url2;
+
+            });
+
+            $(".evrakSubmitBtn").click(function () {
+                $("#evrakForm" + $(this).attr('id')).submit();
+
+            });
+
+
+            /* Evrak Upload ... */
+
+            $(".evrakForm").on("submit", function (event){
+                event.preventDefault();
+                var url = $(this).attr("action");
+                var formData = new FormData($('form').get(0));
+               // console.log(formData);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,//file null dönememsi için 
+                    processData: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log("başarılı" + data);
+                        $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-danger");
+                        $("#dosyaDurum_" + data.evrakTipiID).addClass("text-success");
+
+                        $("#dosyaDurum_" + data.evrakTipiID).text("Evrak Gönderildi!");
+
+                    },
+                    error: function (data) {
+                        $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-success");
+                        $("#dosyaDurum_" + data.evrakTipiID).addClass("text-danger");
+                        $("#dosyaDurum_" + data.evrakTipiID).text("Evrak gönderilemedi!");
+                    }
+                    
+                });
+
 
             });
 

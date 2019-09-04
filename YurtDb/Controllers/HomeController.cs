@@ -82,26 +82,29 @@ namespace YurtDb.Controllers
         {
             string link="";
             System.Diagnostics.Debug.WriteLine(evrakTipiID);
-            if (file.ContentLength > 0)
-            {
-                var fileName = "";
-                string evrakAdi = context.evrakTipis.First(p => p.evrakTipiID == evrakTipiID).adi;
-                if (evrakAdi != null)
-                    fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + evrakAdi;
-                else
-                    fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + "--";
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName+""+ Path.GetExtension(file.FileName));
-                link = path;
-                file.SaveAs(path);
-            }
+          
+                if (file.ContentLength > 0)
+                {
+                    var fileName = "";
+                    string evrakAdi = context.evrakTipis.First(p => p.evrakTipiID == evrakTipiID).adi;
+                    if (evrakAdi != null)
+                        fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + evrakAdi;
+                    else
+                        fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + "--";
+                    var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName + "" + Path.GetExtension(file.FileName));
+                    link = path;
+                    file.SaveAs(path);
+                }
 
-            basvuruFormu.evrakBilgileri.ogrenciNo = basvuruFormu.ogrenciBilgileri.ogrenciNo;
-            basvuruFormu.evrakBilgileri.link = link;
-            basvuruFormu.evrakBilgileri.evrakTipiID = evrakTipiID;
-            /// basvuruFormu.evrakBilgileri.donemTipiID = 0;
-            /// 
-            basvuruFormu.yuklenenEvraklar.Add(evrakTipiID);
-            return RedirectToAction("Index");
+                basvuruFormu.evrakBilgileri.ogrenciNo = basvuruFormu.ogrenciBilgileri.ogrenciNo;
+                basvuruFormu.evrakBilgileri.link = link;
+                basvuruFormu.evrakBilgileri.evrakTipiID = evrakTipiID;
+                /// basvuruFormu.evrakBilgileri.donemTipiID = 0;
+                /// 
+                basvuruFormu.yuklenenEvraklar.Add(evrakTipiID);
+
+
+            return Json(new { evrakTipiID = ""+evrakTipiID, kalanEvrakSayisi =basvuruFormu.evrakTipi.Count()-basvuruFormu.yuklenenEvraklar.Count() }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -173,18 +176,20 @@ namespace YurtDb.Controllers
 
         public void basvuruAdimiGuncelle()
         {
+            basvuruFormu.sayfaYonlendirme = -1;
             if (basvuruFormu.evrakBilgileri != null)
                 basvuruFormu.basvuruAdimi = 3;
             else if (basvuruFormu.odaBilgileri != null)
             {
                 basvuruFormu.basvuruAdimi = 2;
+                if(sayfaYonlendirme==-1)
                 OdaBilgileriniListele();
             }
             else if (basvuruFormu.ogrenciBilgileri != null)
                 basvuruFormu.basvuruAdimi = 1;
             else
                 basvuruFormu.basvuruAdimi = 0;
-            basvuruFormu.sayfaYonlendirme = -1;
+          
         }
 
 

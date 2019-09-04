@@ -51,30 +51,33 @@
 
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
+            if ($("#öncelikCombobox").css("display") == "block")
+                 $("#odaSecimSubmitBtn").css("display", "block");
+            if ($("#öncelikCombobox").css("display") != "block")
+            $("#odaTipleri").append('<option selected="true" disabled>Oda Seçiniz</option>');
+                    /*   Combobox   */  
+       // let dropdown = $('#odaTipleri');
 
-                    /*   Combobox   */
-        let dropdown = $('#odaTipleri');
+      //  dropdown.empty();
 
-        dropdown.empty();
+      //  dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
+      //  dropdown.prop('selectedIndex', 0);
 
-        dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
-        dropdown.prop('selectedIndex', 0);
-
-        const url = '@Url.Action("getRooms", "Home")';
-        console.log(url);
+      //  const url = '@Url.Action("getRooms", "Home")';
+      //  console.log(url);
         // Populate dropdown with list of provinces
-        $.getJSON(url, function (data) {
+      /*  $.getJSON(url, function (data) {
             $.each(data, function (key, entry) {
                 dropdown.append($('<option></option>').attr('value', entry.odaTipiID).text(entry.adi));
             })
         });
+*/
 
 
 
 
-
-
+            @*
         let indirimler = $('#indirimTipleri');
 
         indirimler.empty();
@@ -84,7 +87,6 @@
 
         var id = $("#odaTipleri").val();
         const url2 = '@Url.Action("indirimler", "Home")';
-        // Populate dropdown with list of provinces
         $.getJSON(url2, function (data) {
             $.each(data, function (key, entry) {
                 indirimler.append($('<option></option>').attr('value', entry.indirimlerID).text(entry.aciklama));
@@ -96,7 +98,7 @@
         });
 
 
-
+                *@
 
         $(".inputDocument").click(function () {
 
@@ -145,7 +147,7 @@
 
 
             $(".adimBtn").click(function (){
-               
+
                 const url2 =  '@Url.Action("changeForm", "Home")'+"?number=" + $(this).attr("number").toString();
                 window.location = url2;
 
@@ -167,7 +169,8 @@
     $.getJSON(url, function (data) {
     $.each(data, function (key, entry) {
     $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
-    console.log("fiyat:" + entry.fiyat);
+        console.log("fiyat:" + entry.fiyat);
+        $("#odaSecimSubmitBtn").css("display", "block");
     })
     });
 
@@ -179,7 +182,7 @@
        var fileName = e.target.files[0].name;
           $(this).prev().text(" 1 dosya seçildi -- "+fileName );
 
-            $("#"+$(this).attr("submitID")).removeClass("disabled");
+          $("#" + $(this).attr("submitID")).removeAttr("disabled");
         });
 
 

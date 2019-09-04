@@ -15,7 +15,7 @@ namespace YurtDb.Controllers
         DB.YurtDatabaseEntities context;
         static BasvuruFormu basvuruFormu;
         int basvuruAdimi=0;
-        int sayfaYonlendirme = -1; // Default olarak -1 olacak..
+        static int sayfaYonlendirme = -1; // Default olarak -1 olacak..
         public HomeController()
         {
             context = new YurtDatabaseEntities();
@@ -31,7 +31,7 @@ namespace YurtDb.Controllers
                 basvuruFormu = new BasvuruFormu();
                 basvuruFormu.basvuruAdimi = 0;
             }
-            //   System.Diagnostics.Debug.WriteLine("Basvuru Adimi ilk : " + basvuruFormu.basvuruAdimi);
+               System.Diagnostics.Debug.WriteLine("Sayfa Adimi ilk : " + sayfaYonlendirme);
             if (sayfaYonlendirme != -1)
             {
                 basvuruFormu.sayfaYonlendirme = sayfaYonlendirme;
@@ -42,7 +42,7 @@ namespace YurtDb.Controllers
                 
 
 
-            //    System.Diagnostics.Debug.WriteLine("Basvuru Adimi Son : " + basvuruFormu.basvuruAdimi);
+                System.Diagnostics.Debug.WriteLine("Basvuru Sayfa Yönlendirme : " + sayfaYonlendirme);
             return View(basvuruFormu);
             
         }
@@ -77,6 +77,32 @@ namespace YurtDb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult evrakUpload(int evrakTipiID, HttpPostedFileBase file)
+        {
+            string link="";
+            System.Diagnostics.Debug.WriteLine(evrakTipiID);
+            if (file.ContentLength > 0)
+            {
+                var fileName = "";
+                string evrakAdi = context.evrakTipis.First(p => p.evrakTipiID == evrakTipiID).adi;
+                if (evrakAdi != null)
+                    fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + evrakAdi;
+                else
+                    fileName = basvuruFormu.ogrenciBilgileri.ogrenciNo + "-" + basvuruFormu.ogrenciBilgileri.adi + "-" + basvuruFormu.ogrenciBilgileri.soyadi + "-" + "--";
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName+""+ Path.GetExtension(file.FileName));
+                link = path;
+                file.SaveAs(path);
+            }
+
+            basvuruFormu.evrakBilgileri.ogrenciNo = basvuruFormu.ogrenciBilgileri.ogrenciNo;
+            basvuruFormu.evrakBilgileri.link = link;
+            basvuruFormu.evrakBilgileri.evrakTipiID = evrakTipiID;
+            /// basvuruFormu.evrakBilgileri.donemTipiID = 0;
+            /// 
+            basvuruFormu.yuklenenEvraklar.Add(evrakTipiID);
+            return RedirectToAction("Index");
+        }
 
 
 
@@ -133,10 +159,14 @@ namespace YurtDb.Controllers
             System.Diagnostics.Debug.WriteLine("odakontrol + indirimId" + basvuru.odaBilgileri.indirimId);
             basvuruFormu.odaBilgileri.odaTipiId = basvuru.odaBilgileri.odaTipiId;
             basvuruFormu.odaBilgileri.indirimId = basvuru.odaBilgileri.indirimId;
+            basvuruFormu.odaFiyati = (double)context.odaFiyatlaris.First(x => x.odaTipiId == basvuru.odaBilgileri.odaTipiId && x.indirimId == basvuru.odaBilgileri.indirimId).fiyat;
+                                           
             //Kontrol aşaması bittikten sonra
-            basvuruFormu.evrakBilgileri = new evrakBilgileri();
-           
 
+
+            basvuruFormu.evrakBilgileri = new evrakBilgileri();
+            basvuruFormu.evrakTipi = context.evrakTipis.Where(p => p.donemTipiID == 1).ToList();
+            basvuruFormu.yuklenenEvraklar = new List<int>();
             return RedirectToAction("Index");
         }
 
@@ -145,25 +175,82 @@ namespace YurtDb.Controllers
         {
             if (basvuruFormu.evrakBilgileri != null)
                 basvuruFormu.basvuruAdimi = 3;
-            else if (basvuruFormu.odaBilgileri != null) 
+            else if (basvuruFormu.odaBilgileri != null)
+            {
                 basvuruFormu.basvuruAdimi = 2;
+                OdaBilgileriniListele();
+            }
             else if (basvuruFormu.ogrenciBilgileri != null)
                 basvuruFormu.basvuruAdimi = 1;
             else
                 basvuruFormu.basvuruAdimi = 0;
-
+            basvuruFormu.sayfaYonlendirme = -1;
         }
+
+
+
 
 
         [HttpGet]
         public ActionResult getRooms()
         {
-           // var odaFiyati = context.odaFiyatlari.Where(p => p.indirimId == 1);
-            var odaTipleri = context.odaTipis
-                            .Select(p => new { p.odaTipiID, p.adi});
+            // var odaFiyati = context.odaFiyatlari.Where(p => p.indirimId == 1);
+            List<OdaKontenjan> odaKontenjanBilgileri = new List<OdaKontenjan>();
+            List<odaTipiKontenjan> kontenjanBilgileri;
+            if (basvuruFormu.ogrenciBilgileri.cinsiyet=="Erkek")
+                kontenjanBilgileri = context.odaTipiKontenjans.Where(p => p.erkekKontenjan>0).ToList();//donemid kontrolü eklenmeil.
+            else
+                kontenjanBilgileri = context.odaTipiKontenjans.Where(p => p.kizKontenjan > 0).ToList();
+
+            for (int i = 0; i < kontenjanBilgileri.Count(); i++)
+            {
+                //  int 
+                //   odaTipi odaTipi = context.odaTipis.FirstOrDefault(p => p.odaTipiID == (kontenjanBilgileri[i].odaTipiID));
+                odaTipi odaTipi = kontenjanBilgileri[i].odaTipi;
+                OdaKontenjan odaKontenjan = new OdaKontenjan();
+                odaKontenjan.adi = odaTipi.adi;
+                odaKontenjan.donemTipiID = (int)odaTipi.donemTipiID;
+                odaKontenjan.odaTipiID = (int)odaTipi.odaTipiID;
+                if (basvuruFormu.ogrenciBilgileri.cinsiyet == "Erkek")
+                    odaKontenjan.kontenjan = (int)kontenjanBilgileri[i].erkekKontenjan;
+                else
+                    odaKontenjan.kontenjan = (int)kontenjanBilgileri[i].kizKontenjan;
+                odaKontenjanBilgileri.Add(odaKontenjan);
+            }  
             
-            var jsonData = Json(odaTipleri, JsonRequestBehavior.AllowGet);
+
+            var jsonData = Json(odaKontenjanBilgileri, JsonRequestBehavior.AllowGet);
             return jsonData;
+        }
+
+
+        public List<OdaKontenjan> getOdaKontenjanList()
+        {
+            // var odaFiyati = context.odaFiyatlari.Where(p => p.indirimId == 1);
+            List<OdaKontenjan> odaKontenjanBilgileri = new List<OdaKontenjan>();
+            List<odaTipiKontenjan> kontenjanBilgileri;
+            if (basvuruFormu.ogrenciBilgileri.cinsiyet == "Erkek")
+                kontenjanBilgileri = context.odaTipiKontenjans.Where(p => p.erkekKontenjan > 0).ToList();//donemid kontrolü eklenmeil.
+            else
+                kontenjanBilgileri = context.odaTipiKontenjans.Where(p => p.kizKontenjan > 0).ToList();
+
+            for (int i = 0; i < kontenjanBilgileri.Count(); i++)
+            {
+                //  int 
+                //   odaTipi odaTipi = context.odaTipis.FirstOrDefault(p => p.odaTipiID == (kontenjanBilgileri[i].odaTipiID));
+                odaTipi odaTipi = kontenjanBilgileri[i].odaTipi;
+                OdaKontenjan odaKontenjan = new OdaKontenjan();
+                odaKontenjan.adi = odaTipi.adi;
+                odaKontenjan.donemTipiID = (int)odaTipi.donemTipiID;
+                odaKontenjan.odaTipiID = (int)odaTipi.odaTipiID;
+                if (basvuruFormu.ogrenciBilgileri.cinsiyet == "Erkek")
+                    odaKontenjan.kontenjan = (int)kontenjanBilgileri[i].erkekKontenjan;
+                else
+                    odaKontenjan.kontenjan = (int)kontenjanBilgileri[i].kizKontenjan;
+                odaKontenjanBilgileri.Add(odaKontenjan);
+            }
+            
+            return odaKontenjanBilgileri;
         }
 
 
@@ -212,6 +299,22 @@ namespace YurtDb.Controllers
             return jsonData;
         }
 
+
+        public void OdaBilgileriniListele()
+        {
+            basvuruFormu.odaKontenjanList = getOdaKontenjanList();
+         //   basvuruFormu.odaTipleri = new List<SelectListItem>();
+         //   basvuruFormu.odaTipleri = context.odaTipis.Select(p => new SelectListItem { Value=p.odaTipiID.ToString(),Text=p.adi }).ToList();
+            basvuruFormu.odaTipleri = basvuruFormu.odaKontenjanList.ConvertAll(a =>
+            {
+                return new SelectListItem()
+                {
+                    Text = a.adi + " ("+a.kontenjan+")",
+                    Value = a.odaTipiID.ToString()
+                };
+            });
+            basvuruFormu.indirimler = context.indirimlers.Select(p => new SelectListItem { Value=p.indirimlerID.ToString(), Text=p.aciklama}).ToList();
+        }
 
     }
 }

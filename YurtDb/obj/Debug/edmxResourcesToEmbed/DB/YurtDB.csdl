@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="YurtDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+<Schema Namespace="YurtDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityType Name="Donem">
     <Key>
       <PropertyRef Name="id" />
@@ -20,15 +20,15 @@
     </Key>
     <Property Name="donemTipiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="adi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Donems" Relationship="Self.FK__Donem__donemTipi__1273C1CD" FromRole="donemTipi" ToRole="Donem" />
-    <NavigationProperty Name="evrakBilgileris" Relationship="Self.FK__evrakBilg__donem__2B3F6F97" FromRole="donemTipi" ToRole="evrakBilgileri" />
-    <NavigationProperty Name="evrakTipis" Relationship="Self.FK__evrakTipi__donem__267ABA7A" FromRole="donemTipi" ToRole="evrakTipi" />
-    <NavigationProperty Name="indirimlers" Relationship="Self.FK__indirimle__donem__1BFD2C07" FromRole="donemTipi" ToRole="indirimler" />
+    <NavigationProperty Name="Donem" Relationship="Self.FK__Donem__donemTipi__1273C1CD" FromRole="donemTipi" ToRole="Donem" />
+    <NavigationProperty Name="evrakBilgileri" Relationship="Self.FK__evrakBilg__donem__2B3F6F97" FromRole="donemTipi" ToRole="evrakBilgileri" />
+    <NavigationProperty Name="evrakTipi" Relationship="Self.FK__evrakTipi__donem__267ABA7A" FromRole="donemTipi" ToRole="evrakTipi" />
+    <NavigationProperty Name="indirimler" Relationship="Self.FK__indirimle__donem__1BFD2C07" FromRole="donemTipi" ToRole="indirimler" />
     <NavigationProperty Name="Kayıt" Relationship="Self.FK__Kayıt__donemTipi__2F10007B" FromRole="donemTipi" ToRole="Kayıt" />
-    <NavigationProperty Name="odaFiyatlaris" Relationship="Self.FK__odaFiyatl__donem__20C1E124" FromRole="donemTipi" ToRole="odaFiyatlari" />
-    <NavigationProperty Name="odaTipis" Relationship="Self.FK__odaTipi__donemTi__15502E78" FromRole="donemTipi" ToRole="odaTipi" />
-    <NavigationProperty Name="odaTipiKontenjans" Relationship="Self.FK__odaTipiKo__donem__1920BF5C" FromRole="donemTipi" ToRole="odaTipiKontenjan" />
-    <NavigationProperty Name="ogrencis" Relationship="Self.FK__ogrenci__donemTi__239E4DCF" FromRole="donemTipi" ToRole="ogrenci" />
+    <NavigationProperty Name="odaFiyatlari" Relationship="Self.FK__odaFiyatl__donem__20C1E124" FromRole="donemTipi" ToRole="odaFiyatlari" />
+    <NavigationProperty Name="odaTipi" Relationship="Self.FK__odaTipi__donemTi__15502E78" FromRole="donemTipi" ToRole="odaTipi" />
+    <NavigationProperty Name="odaTipiKontenjan" Relationship="Self.FK__odaTipiKo__donem__1920BF5C" FromRole="donemTipi" ToRole="odaTipiKontenjan" />
+    <NavigationProperty Name="ogrenci" Relationship="Self.FK__ogrenci__donemTi__239E4DCF" FromRole="donemTipi" ToRole="ogrenci" />
   </EntityType>
   <EntityType Name="evrakBilgileri">
     <Key>
@@ -37,8 +37,9 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="evrakTipiID" Type="Int32" />
     <Property Name="link" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="ogrenciNo" Type="Int32" />
+    <Property Name="ogrenciNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="donemTipiID" Type="Int32" />
+    <Property Name="evrakAdi" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__evrakBilg__donem__2B3F6F97" FromRole="evrakBilgileri" ToRole="donemTipi" />
     <NavigationProperty Name="evrakTipi" Relationship="Self.FK__evrakBilg__evrak__29572725" FromRole="evrakBilgileri" ToRole="evrakTipi" />
     <NavigationProperty Name="ogrenci" Relationship="Self.FK__evrakBilg__ogren__2A4B4B5E" FromRole="evrakBilgileri" ToRole="ogrenci" />
@@ -54,7 +55,7 @@
     <Property Name="gorunum" Type="Int32" />
     <Property Name="donemTipiID" Type="Int32" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__evrakTipi__donem__267ABA7A" FromRole="evrakTipi" ToRole="donemTipi" />
-    <NavigationProperty Name="evrakBilgileris" Relationship="Self.FK__evrakBilg__evrak__29572725" FromRole="evrakTipi" ToRole="evrakBilgileri" />
+    <NavigationProperty Name="evrakBilgileri" Relationship="Self.FK__evrakBilg__evrak__29572725" FromRole="evrakTipi" ToRole="evrakBilgileri" />
   </EntityType>
   <EntityType Name="indirimler">
     <Key>
@@ -65,18 +66,19 @@
     <Property Name="indirimOrani" Type="Double" />
     <Property Name="donemTipiID" Type="Int32" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__indirimle__donem__1BFD2C07" FromRole="indirimler" ToRole="donemTipi" />
-    <NavigationProperty Name="odaFiyatlaris" Relationship="Self.FK__odaFiyatl__indir__1FCDBCEB" FromRole="indirimler" ToRole="odaFiyatlari" />
+    <NavigationProperty Name="odaFiyatlari" Relationship="Self.FK__odaFiyatl__indir__1FCDBCEB" FromRole="indirimler" ToRole="odaFiyatlari" />
   </EntityType>
   <EntityType Name="Kayıt">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ogrenciNo" Type="Int32" />
-    <Property Name="odaBilgileri" Type="Int32" />
+    <Property Name="odaFiyatlariID" Type="Int32" />
     <Property Name="donemTipiID" Type="Int32" />
+    <Property Name="ogrenciNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__Kayıt__donemTipi__2F10007B" FromRole="Kayıt" ToRole="donemTipi" />
-    <NavigationProperty Name="odaFiyatlari" Relationship="Self.FK__Kayıt__odaBilgil__2E1BDC42" FromRole="Kayıt" ToRole="odaFiyatlari" />
+    <NavigationProperty Name="odaFiyatlari" Relationship="Self.FK__Kayıt__odaFiyatl__2E1BDC42" FromRole="Kayıt" ToRole="odaFiyatlari" />
+    <NavigationProperty Name="ogrenci" Relationship="Self.FK__Kayıt__ogrenciNo__31EC6D26" FromRole="Kayıt" ToRole="ogrenci" />
   </EntityType>
   <EntityType Name="odaFiyatlari">
     <Key>
@@ -90,7 +92,7 @@
     <Property Name="donemTipiID" Type="Int32" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__odaFiyatl__donem__20C1E124" FromRole="odaFiyatlari" ToRole="donemTipi" />
     <NavigationProperty Name="indirimler" Relationship="Self.FK__odaFiyatl__indir__1FCDBCEB" FromRole="odaFiyatlari" ToRole="indirimler" />
-    <NavigationProperty Name="Kayıt" Relationship="Self.FK__Kayıt__odaBilgil__2E1BDC42" FromRole="odaFiyatlari" ToRole="Kayıt" />
+    <NavigationProperty Name="Kayıt" Relationship="Self.FK__Kayıt__odaFiyatl__2E1BDC42" FromRole="odaFiyatlari" ToRole="Kayıt" />
     <NavigationProperty Name="odaTipi" Relationship="Self.FK__odaFiyatl__odaTi__1ED998B2" FromRole="odaFiyatlari" ToRole="odaTipi" />
   </EntityType>
   <EntityType Name="odaTipi">
@@ -101,8 +103,8 @@
     <Property Name="adi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="donemTipiID" Type="Int32" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__odaTipi__donemTi__15502E78" FromRole="odaTipi" ToRole="donemTipi" />
-    <NavigationProperty Name="odaFiyatlaris" Relationship="Self.FK__odaFiyatl__odaTi__1ED998B2" FromRole="odaTipi" ToRole="odaFiyatlari" />
-    <NavigationProperty Name="odaTipiKontenjans" Relationship="Self.FK__odaTipiKo__odaTi__182C9B23" FromRole="odaTipi" ToRole="odaTipiKontenjan" />
+    <NavigationProperty Name="odaFiyatlari" Relationship="Self.FK__odaFiyatl__odaTi__1ED998B2" FromRole="odaTipi" ToRole="odaFiyatlari" />
+    <NavigationProperty Name="odaTipiKontenjan" Relationship="Self.FK__odaTipiKo__odaTi__182C9B23" FromRole="odaTipi" ToRole="odaTipiKontenjan" />
   </EntityType>
   <EntityType Name="odaTipiKontenjan">
     <Key>
@@ -121,16 +123,30 @@
     <Key>
       <PropertyRef Name="ogrenciNo" />
     </Key>
-    <Property Name="ogrenciNo" Type="Int32" Nullable="false" />
+    <Property Name="ogrenciNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="tcNo" Type="Int64" />
     <Property Name="adi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="soyadi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="egitimDurumu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="fakulteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="bolumNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cinsiyet" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="donemTipiID" Type="Int32" />
     <NavigationProperty Name="donemTipi" Relationship="Self.FK__ogrenci__donemTi__239E4DCF" FromRole="ogrenci" ToRole="donemTipi" />
-    <NavigationProperty Name="evrakBilgileris" Relationship="Self.FK__evrakBilg__ogren__2A4B4B5E" FromRole="ogrenci" ToRole="evrakBilgileri" />
+    <NavigationProperty Name="evrakBilgileri" Relationship="Self.FK__evrakBilg__ogren__2A4B4B5E" FromRole="ogrenci" ToRole="evrakBilgileri" />
+    <NavigationProperty Name="Kayıt" Relationship="Self.FK__Kayıt__ogrenciNo__31EC6D26" FromRole="ogrenci" ToRole="Kayıt" />
+  </EntityType>
+  <EntityType Name="ogrenciApi">
+    <Key>
+      <PropertyRef Name="ogrenciNo" />
+    </Key>
+    <Property Name="ogrenciNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="tcNo" Type="Int64" />
+    <Property Name="adi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="soyadi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="egitimDurumu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="fakulteNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="bolumNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="cinsiyet" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK__Donem__donemTipi__1273C1CD">
@@ -277,7 +293,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Kayıt__odaBilgil__2E1BDC42">
+  <Association Name="FK__Kayıt__odaFiyatl__2E1BDC42">
     <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="0..1" />
     <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
     <ReferentialConstraint>
@@ -285,7 +301,19 @@
         <PropertyRef Name="odaFiyatlariID" />
       </Principal>
       <Dependent Role="Kayıt">
-        <PropertyRef Name="odaBilgileri" />
+        <PropertyRef Name="odaFiyatlariID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kayıt__ogrenciNo__31EC6D26">
+    <End Role="ogrenci" Type="Self.ogrenci" Multiplicity="0..1" />
+    <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenci">
+        <PropertyRef Name="ogrenciNo" />
+      </Principal>
+      <Dependent Role="Kayıt">
+        <PropertyRef Name="ogrenciNo" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -313,76 +341,81 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="YurtDatabaseEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Donems" EntityType="Self.Donem" />
-    <EntitySet Name="donemTipis" EntityType="Self.donemTipi" />
-    <EntitySet Name="evrakBilgileris" EntityType="Self.evrakBilgileri" />
-    <EntitySet Name="evrakTipis" EntityType="Self.evrakTipi" />
-    <EntitySet Name="indirimlers" EntityType="Self.indirimler" />
+  <EntityContainer Name="YurtDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Donem" EntityType="Self.Donem" />
+    <EntitySet Name="donemTipi" EntityType="Self.donemTipi" />
+    <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" />
+    <EntitySet Name="evrakTipi" EntityType="Self.evrakTipi" />
+    <EntitySet Name="indirimler" EntityType="Self.indirimler" />
     <EntitySet Name="Kayıt" EntityType="Self.Kayıt" />
-    <EntitySet Name="odaFiyatlaris" EntityType="Self.odaFiyatlari" />
-    <EntitySet Name="odaTipis" EntityType="Self.odaTipi" />
-    <EntitySet Name="odaTipiKontenjans" EntityType="Self.odaTipiKontenjan" />
-    <EntitySet Name="ogrencis" EntityType="Self.ogrenci" />
+    <EntitySet Name="odaFiyatlari" EntityType="Self.odaFiyatlari" />
+    <EntitySet Name="odaTipi" EntityType="Self.odaTipi" />
+    <EntitySet Name="odaTipiKontenjan" EntityType="Self.odaTipiKontenjan" />
+    <EntitySet Name="ogrenci" EntityType="Self.ogrenci" />
+    <EntitySet Name="ogrenciApi" EntityType="Self.ogrenciApi" />
     <AssociationSet Name="FK__Donem__donemTipi__1273C1CD" Association="Self.FK__Donem__donemTipi__1273C1CD">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="Donem" EntitySet="Donems" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="Donem" EntitySet="Donem" />
     </AssociationSet>
     <AssociationSet Name="FK__evrakBilg__donem__2B3F6F97" Association="Self.FK__evrakBilg__donem__2B3F6F97">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="evrakBilgileri" EntitySet="evrakBilgileris" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
     </AssociationSet>
     <AssociationSet Name="FK__evrakTipi__donem__267ABA7A" Association="Self.FK__evrakTipi__donem__267ABA7A">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="evrakTipi" EntitySet="evrakTipis" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="evrakTipi" EntitySet="evrakTipi" />
     </AssociationSet>
     <AssociationSet Name="FK__indirimle__donem__1BFD2C07" Association="Self.FK__indirimle__donem__1BFD2C07">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="indirimler" EntitySet="indirimlers" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="indirimler" EntitySet="indirimler" />
     </AssociationSet>
     <AssociationSet Name="FK__Kayıt__donemTipi__2F10007B" Association="Self.FK__Kayıt__donemTipi__2F10007B">
-      <End Role="donemTipi" EntitySet="donemTipis" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
       <End Role="Kayıt" EntitySet="Kayıt" />
     </AssociationSet>
     <AssociationSet Name="FK__odaFiyatl__donem__20C1E124" Association="Self.FK__odaFiyatl__donem__20C1E124">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="odaFiyatlari" EntitySet="odaFiyatlaris" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
     </AssociationSet>
     <AssociationSet Name="FK__odaTipi__donemTi__15502E78" Association="Self.FK__odaTipi__donemTi__15502E78">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="odaTipi" EntitySet="odaTipis" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaTipi" EntitySet="odaTipi" />
     </AssociationSet>
     <AssociationSet Name="FK__odaTipiKo__donem__1920BF5C" Association="Self.FK__odaTipiKo__donem__1920BF5C">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjans" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
     </AssociationSet>
     <AssociationSet Name="FK__ogrenci__donemTi__239E4DCF" Association="Self.FK__ogrenci__donemTi__239E4DCF">
-      <End Role="donemTipi" EntitySet="donemTipis" />
-      <End Role="ogrenci" EntitySet="ogrencis" />
+      <End Role="donemTipi" EntitySet="donemTipi" />
+      <End Role="ogrenci" EntitySet="ogrenci" />
     </AssociationSet>
     <AssociationSet Name="FK__evrakBilg__evrak__29572725" Association="Self.FK__evrakBilg__evrak__29572725">
-      <End Role="evrakTipi" EntitySet="evrakTipis" />
-      <End Role="evrakBilgileri" EntitySet="evrakBilgileris" />
+      <End Role="evrakTipi" EntitySet="evrakTipi" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
     </AssociationSet>
     <AssociationSet Name="FK__evrakBilg__ogren__2A4B4B5E" Association="Self.FK__evrakBilg__ogren__2A4B4B5E">
-      <End Role="ogrenci" EntitySet="ogrencis" />
-      <End Role="evrakBilgileri" EntitySet="evrakBilgileris" />
+      <End Role="ogrenci" EntitySet="ogrenci" />
+      <End Role="evrakBilgileri" EntitySet="evrakBilgileri" />
     </AssociationSet>
     <AssociationSet Name="FK__odaFiyatl__indir__1FCDBCEB" Association="Self.FK__odaFiyatl__indir__1FCDBCEB">
-      <End Role="indirimler" EntitySet="indirimlers" />
-      <End Role="odaFiyatlari" EntitySet="odaFiyatlaris" />
+      <End Role="indirimler" EntitySet="indirimler" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
     </AssociationSet>
-    <AssociationSet Name="FK__Kayıt__odaBilgil__2E1BDC42" Association="Self.FK__Kayıt__odaBilgil__2E1BDC42">
-      <End Role="odaFiyatlari" EntitySet="odaFiyatlaris" />
+    <AssociationSet Name="FK__Kayıt__odaFiyatl__2E1BDC42" Association="Self.FK__Kayıt__odaFiyatl__2E1BDC42">
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+      <End Role="Kayıt" EntitySet="Kayıt" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kayıt__ogrenciNo__31EC6D26" Association="Self.FK__Kayıt__ogrenciNo__31EC6D26">
+      <End Role="ogrenci" EntitySet="ogrenci" />
       <End Role="Kayıt" EntitySet="Kayıt" />
     </AssociationSet>
     <AssociationSet Name="FK__odaFiyatl__odaTi__1ED998B2" Association="Self.FK__odaFiyatl__odaTi__1ED998B2">
-      <End Role="odaTipi" EntitySet="odaTipis" />
-      <End Role="odaFiyatlari" EntitySet="odaFiyatlaris" />
+      <End Role="odaTipi" EntitySet="odaTipi" />
+      <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
     </AssociationSet>
     <AssociationSet Name="FK__odaTipiKo__odaTi__182C9B23" Association="Self.FK__odaTipiKo__odaTi__182C9B23">
-      <End Role="odaTipi" EntitySet="odaTipis" />
-      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjans" />
+      <End Role="odaTipi" EntitySet="odaTipi" />
+      <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

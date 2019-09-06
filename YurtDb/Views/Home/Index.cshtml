@@ -13,6 +13,9 @@
 </div>
 @Model.sayfaYonlendirme
 aa
+
+
+
 @if (Model.sayfaYonlendirme == 0 || (Model.sayfaYonlendirme == -1 && Model.basvuruAdimi == 0))
 {
     <div class="offset-md-4 mt-4 col-md-4 col-sm-12">
@@ -86,6 +89,16 @@ else if (Model.sayfaYonlendirme == 1 || (Model.sayfaYonlendirme == -1 && Model.b
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Cinsiyet</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.cinsiyet, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Cinsiyet", type = "text" } })
+
+                            </div>
+                        </div>
+                    </div>
                     <!--
                     <div class="row">
                         <div class="col-md-6">
@@ -113,7 +126,7 @@ else if (Model.sayfaYonlendirme == 1 || (Model.sayfaYonlendirme == -1 && Model.b
                             <div class="form-group text-right ">
                                 @if (Model.basvuruAdimi > 1)
                                 {
-                                    <input type="button" class="btn btn-success btn-sm"  onclick="$('#adim2').click();" value="İlerle" />
+                                    <input type="button" class="btn btn-success btn-sm" onclick="$('#adim2').click();" value="İlerle" />
 
                                 }
                                 else
@@ -178,9 +191,9 @@ else if (Model.sayfaYonlendirme == 2 || (Model.sayfaYonlendirme == -1 && Model.b
                     </div>
                     <div class="row">
                         <div class="col-md-6 text-left">
-                        
-                                <input type="button" class="btn btn-success btn-sm" onclick="$('#adim1').click();" value="Geri Git">
-                          
+
+                            <input type="button" class="btn btn-success btn-sm" onclick="$('#adim1').click();" value="Geri Git">
+
                         </div>
                         <div class="col-md-6">
                             <div id="odaSecimSubmitBtn" class="form-group text-right" style="display:none;">
@@ -250,10 +263,14 @@ else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.b
                                     @if (Model.yuklenenEvraklar.Contains(item.evrakTipiID))
                                     {
                                         <span class="text-success" id="dosyaDurum_@item.evrakTipiID"> Evrak Yüklendi</span>
+
+                                        <a href="@Url.Action("evrakGoster","Home",new { evrakTipiID=item.evrakTipiID })" id="btnEvrakGoster_@item.evrakTipiID" target="_blank" style="float:right" class="ml-2 btn btn-sm btn-outline-info">Evrağı Göster</a>
                                     }
                                     else
                                     {
                                         <span class="text-danger" id="dosyaDurum_@item.evrakTipiID"> Dosya Seçilmedi</span>
+                                        <a href="@Url.Action("evrakGoster","Home",new { evrakTipiID=item.evrakTipiID })" id="btnEvrakGoster_@item.evrakTipiID" style="float:right; display:none;" target="_blank" class="ml-2 btn btn-sm btn-outline-info">Evrağı Göster</a>
+
                                     }
                                     <input type="file" name="file" class="form-control-file fileInput" submitId="@item.evrakTipiID" id="fileInput" style="display:none" accept="application/pdf,application/vnd.ms-excel">
 
@@ -262,7 +279,7 @@ else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.b
 
                         </div>
                         <div class="form-group text-center " style="margin-bottom:4px;">
-                            <input type="button" id="@item.evrakTipiID" class="btn btn-success btn-sm evrakSubmitBtn" disabled="disabled" value="Dosyayı Yükle" />
+                            <button type="button" id="@item.evrakTipiID" class="btn btn-success btn-sm evrakSubmitBtn" disabled="disabled">Dosyayı Yükle</button>
                             <input type="submit" id="evrakSubmitBtn_@item.evrakTipiID" class="btn btn-success btn-sm evrakSubmitBtn" style="display:none;" value="Dosyayı Yükle" />
                         </div>
                     }
@@ -274,9 +291,44 @@ else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.b
     <div class="offset-md-3 mt-4 col-md-6">
         <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
             <div class="card-body p-2">
-                <div class="row mt-2 mb-2 p-3" id="kayitTamamlaBtn">
-                    <div class="col-md-6 text-left"><button class="btn btn-success btn-sm" onclick="$('#adim2').click();">Geri Git</button></div>
-                    <div class="col-md-6 text-right">       <button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Kaydı Tamamla</button></div>
+                <div class="row mt-2 mb-2 p-3">
+                    <div class="col-md-6 text-left">
+                        <button class="btn btn-success btn-sm" onclick="$('#adim2').click();">Geri Git</button>
+                    </div>
+                    @if (Model.evrakBilgileriList != null)
+                    {
+                        if (Model.evrakBilgileriList.Count == Model.yuklenenEvraklar.Count)
+                        {<div class="col-md-6 text-right">
+                                @using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                                {
+                                    <button class="btn btn-success btn-sm" id="kayitTamamlaBtn">Kaydı Tamamla</button>
+
+                                }
+                            </div>
+                        }
+                        else
+                        { <div class="col-md-6 text-right">
+                                using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                                {
+                                <button class="btn btn-success btn-sm" id="kayitTamamlaBtn" style="display:none;">Kaydı Tamamla</button>
+
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-6 text-right">
+                            @using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                            {
+                                <button class="btn btn-success btn-sm" id="kayitTamamlaBtn" style="display:none;">Kaydı Tamamla</button>
+
+                            }
+                        </div>
+                    }
+
+
+
 
                 </div>
             </div>
@@ -293,11 +345,11 @@ else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.b
 
 
 <script>
-                                                                /* document.getElementById('fileInput').onchange = function () {
-                                                                     alert('Selected file: ' + this.value);
-                                                                 }
+                                                                                                        /* document.getElementById('fileInput').onchange = function () {
+                                                                                                             alert('Selected file: ' + this.value);
+                                                                                                         }
 
-                                                                 ;**/
+                                                                                                         ;**/
 
 </script>
 

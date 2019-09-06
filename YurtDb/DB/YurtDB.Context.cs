@@ -13,10 +13,10 @@ namespace YurtDb.DB
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class YurtDatabaseEntities : DbContext
+    public partial class YurtDBEntities : DbContext
     {
-        public YurtDatabaseEntities()
-            : base("name=YurtDatabaseEntities")
+        public YurtDBEntities()
+            : base("name=YurtDBEntities")
         {
         }
     
@@ -25,15 +25,16 @@ namespace YurtDb.DB
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Donem> Donems { get; set; }
-        public virtual DbSet<donemTipi> donemTipis { get; set; }
-        public virtual DbSet<evrakBilgileri> evrakBilgileris { get; set; }
-        public virtual DbSet<evrakTipi> evrakTipis { get; set; }
-        public virtual DbSet<indirimler> indirimlers { get; set; }
+        public virtual DbSet<Donem> Donem { get; set; }
+        public virtual DbSet<donemTipi> donemTipi { get; set; }
+        public virtual DbSet<evrakBilgileri> evrakBilgileri { get; set; }
+        public virtual DbSet<evrakTipi> evrakTipi { get; set; }
+        public virtual DbSet<indirimler> indirimler { get; set; }
         public virtual DbSet<Kayıt> Kayıt { get; set; }
-        public virtual DbSet<odaFiyatlari> odaFiyatlaris { get; set; }
-        public virtual DbSet<odaTipi> odaTipis { get; set; }
-        public virtual DbSet<odaTipiKontenjan> odaTipiKontenjans { get; set; }
-        public virtual DbSet<ogrenci> ogrencis { get; set; }
+        public virtual DbSet<odaFiyatlari> odaFiyatlari { get; set; }
+        public virtual DbSet<odaTipi> odaTipi { get; set; }
+        public virtual DbSet<odaTipiKontenjan> odaTipiKontenjan { get; set; }
+        public virtual DbSet<ogrenci> ogrenci { get; set; }
+        public virtual DbSet<ogrenciApi> ogrenciApi { get; set; }
     }
 }

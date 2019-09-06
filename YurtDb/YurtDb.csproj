@@ -200,6 +200,9 @@
     <Compile Include="DB\ogrenci.cs">
       <DependentUpon>YurtDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="DB\ogrenciApi.cs">
+      <DependentUpon>YurtDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\YurtDB.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -241,6 +244,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Views\Home\BasvuruBilgileri.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

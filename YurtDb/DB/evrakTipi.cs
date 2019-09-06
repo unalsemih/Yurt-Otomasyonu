@@ -17,7 +17,7 @@ namespace YurtDb.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public evrakTipi()
         {
-            this.evrakBilgileris = new HashSet<evrakBilgileri>();
+            this.evrakBilgileri = new HashSet<evrakBilgileri>();
         }
     
         public int evrakTipiID { get; set; }
@@ -29,6 +29,6 @@ namespace YurtDb.DB
     
         public virtual donemTipi donemTipi { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<evrakBilgileri> evrakBilgileris { get; set; }
+        public virtual ICollection<evrakBilgileri> evrakBilgileri { get; set; }
     }
 }

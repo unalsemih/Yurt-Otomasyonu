@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="YurtDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="YurtDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Donem">
     <Key>
       <PropertyRef Name="id" />
@@ -27,8 +27,9 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="evrakTipiID" Type="int" />
     <Property Name="link" Type="varchar" MaxLength="250" />
-    <Property Name="ogrenciNo" Type="int" />
+    <Property Name="ogrenciNo" Type="nvarchar" MaxLength="50" />
     <Property Name="donemTipiID" Type="int" />
+    <Property Name="evrakAdi" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="evrakTipi">
     <Key>
@@ -55,9 +56,9 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ogrenciNo" Type="int" />
-    <Property Name="odaBilgileri" Type="int" />
+    <Property Name="odaFiyatlariID" Type="int" />
     <Property Name="donemTipiID" Type="int" />
+    <Property Name="ogrenciNo" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="odaFiyatlari">
     <Key>
@@ -93,14 +94,27 @@
     <Key>
       <PropertyRef Name="ogrenciNo" />
     </Key>
-    <Property Name="ogrenciNo" Type="int" Nullable="false" />
+    <Property Name="ogrenciNo" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="tcNo" Type="bigint" />
     <Property Name="adi" Type="varchar" MaxLength="50" />
     <Property Name="soyadi" Type="varchar" MaxLength="50" />
     <Property Name="egitimDurumu" Type="varchar" MaxLength="50" />
     <Property Name="fakulteNo" Type="varchar" MaxLength="50" />
     <Property Name="bolumNo" Type="varchar" MaxLength="50" />
+    <Property Name="cinsiyet" Type="varchar" MaxLength="5" />
     <Property Name="donemTipiID" Type="int" />
+  </EntityType>
+  <EntityType Name="ogrenciApi">
+    <Key>
+      <PropertyRef Name="ogrenciNo" />
+    </Key>
+    <Property Name="ogrenciNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="tcNo" Type="bigint" />
+    <Property Name="adi" Type="varchar" MaxLength="50" />
+    <Property Name="soyadi" Type="varchar" MaxLength="50" />
+    <Property Name="egitimDurumu" Type="varchar" MaxLength="50" />
+    <Property Name="fakulteNo" Type="varchar" MaxLength="50" />
+    <Property Name="bolumNo" Type="varchar" MaxLength="50" />
     <Property Name="cinsiyet" Type="varchar" MaxLength="5" />
   </EntityType>
   <Association Name="FK__Donem__donemTipi__1273C1CD">
@@ -187,7 +201,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Kayıt__odaBilgil__2E1BDC42">
+  <Association Name="FK__Kayıt__odaFiyatl__2E1BDC42">
     <End Role="odaFiyatlari" Type="Self.odaFiyatlari" Multiplicity="0..1" />
     <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
     <ReferentialConstraint>
@@ -195,7 +209,19 @@
         <PropertyRef Name="odaFiyatlariID" />
       </Principal>
       <Dependent Role="Kayıt">
-        <PropertyRef Name="odaBilgileri" />
+        <PropertyRef Name="odaFiyatlariID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Kayıt__ogrenciNo__31EC6D26">
+    <End Role="ogrenci" Type="Self.ogrenci" Multiplicity="0..1" />
+    <End Role="Kayıt" Type="Self.Kayıt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ogrenci">
+        <PropertyRef Name="ogrenciNo" />
+      </Principal>
+      <Dependent Role="Kayıt">
+        <PropertyRef Name="ogrenciNo" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -283,7 +309,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="YurtDatabaseModelStoreContainer">
+  <EntityContainer Name="YurtDBModelStoreContainer">
     <EntitySet Name="Donem" EntityType="Self.Donem" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="donemTipi" EntityType="Self.donemTipi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" Schema="dbo" store:Type="Tables" />
@@ -294,6 +320,7 @@
     <EntitySet Name="odaTipi" EntityType="Self.odaTipi" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="odaTipiKontenjan" EntityType="Self.odaTipiKontenjan" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ogrenci" EntityType="Self.ogrenci" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ogrenciApi" EntityType="Self.ogrenciApi" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__Donem__donemTipi__1273C1CD" Association="Self.FK__Donem__donemTipi__1273C1CD">
       <End Role="donemTipi" EntitySet="donemTipi" />
       <End Role="Donem" EntitySet="Donem" />
@@ -322,8 +349,12 @@
       <End Role="donemTipi" EntitySet="donemTipi" />
       <End Role="Kayıt" EntitySet="Kayıt" />
     </AssociationSet>
-    <AssociationSet Name="FK__Kayıt__odaBilgil__2E1BDC42" Association="Self.FK__Kayıt__odaBilgil__2E1BDC42">
+    <AssociationSet Name="FK__Kayıt__odaFiyatl__2E1BDC42" Association="Self.FK__Kayıt__odaFiyatl__2E1BDC42">
       <End Role="odaFiyatlari" EntitySet="odaFiyatlari" />
+      <End Role="Kayıt" EntitySet="Kayıt" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Kayıt__ogrenciNo__31EC6D26" Association="Self.FK__Kayıt__ogrenciNo__31EC6D26">
+      <End Role="ogrenci" EntitySet="ogrenci" />
       <End Role="Kayıt" EntitySet="Kayıt" />
     </AssociationSet>
     <AssociationSet Name="FK__odaFiyatl__donem__20C1E124" Association="Self.FK__odaFiyatl__donem__20C1E124">

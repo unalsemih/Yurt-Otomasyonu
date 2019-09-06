@@ -17,8 +17,9 @@ namespace YurtDb.DB
         public int id { get; set; }
         public Nullable<int> evrakTipiID { get; set; }
         public string link { get; set; }
-        public Nullable<int> ogrenciNo { get; set; }
+        public string ogrenciNo { get; set; }
         public Nullable<int> donemTipiID { get; set; }
+        public string evrakAdi { get; set; }
     
         public virtual donemTipi donemTipi { get; set; }
         public virtual evrakTipi evrakTipi { get; set; }

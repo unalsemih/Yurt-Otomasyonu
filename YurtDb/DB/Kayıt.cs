@@ -15,11 +15,12 @@ namespace YurtDb.DB
     public partial class Kayıt
     {
         public int id { get; set; }
-        public Nullable<int> ogrenciNo { get; set; }
-        public Nullable<int> odaBilgileri { get; set; }
+        public Nullable<int> odaFiyatlariID { get; set; }
         public Nullable<int> donemTipiID { get; set; }
+        public string ogrenciNo { get; set; }
     
         public virtual donemTipi donemTipi { get; set; }
         public virtual odaFiyatlari odaFiyatlari { get; set; }
+        public virtual ogrenci ogrenci { get; set; }
     }
 }

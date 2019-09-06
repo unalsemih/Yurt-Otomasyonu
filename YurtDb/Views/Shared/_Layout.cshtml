@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -111,7 +112,7 @@
 
             $(".inputDocument").click(function () {
 
-                var input = $(this).next().next().click();
+                var input = $(this).next().next().next().click();
 
             });
 
@@ -123,6 +124,8 @@
                     alert("TC giriniz!");
                 }
                 else {
+                    $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
+                    $(this).attr("disabled", "disabled");
                     let dropdown = $('#egitimTipleri');
 
                     dropdown.empty();
@@ -132,7 +135,7 @@
 
                     $.getJSON(url2, function (data) {
                         var count = Object.keys(data).length;
-                        if (count > 1) {
+                        if (count > 0) {
                             $.each(data, function (key, entry) {
 
                                 dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
@@ -150,6 +153,7 @@
                         }
                     });
                 }
+                
             });
 
 
@@ -161,6 +165,7 @@
             });
 
             $(".evrakSubmitBtn").click(function () {
+                $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
                 $("#evrakForm" + $(this).attr('id')).submit();
 
             });
@@ -182,12 +187,22 @@
                     processData: false,
                     dataType: 'json',
                     success: function (data) {
-                        console.log("başarılı" + data);
-                        $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-danger");
-                        $("#dosyaDurum_" + data.evrakTipiID).addClass("text-success");
+                        if (data.error == "") {
+                            console.log("başarılı" + data);
+                            $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-danger");
+                            $("#dosyaDurum_" + data.evrakTipiID).addClass("text-success");
 
-                        $("#dosyaDurum_" + data.evrakTipiID).text("Evrak Gönderildi!");
-
+                            $("#dosyaDurum_" + data.evrakTipiID).text("Evrak Gönderildi!");
+                            $("#" + data.evrakTipiID + "").attr("disabled", "disabled");
+                            $("#" + data.evrakTipiID + "").html("Dosya Gönderildi");
+                            $("#btnEvrakGoster_" + data.evrakTipiID + "").css("display", "block");
+                            if (data.kalanEvrakSayisi == 0)
+                                $("#kayitTamamlaBtn").css("display","inline-block");
+                        }
+                        else {
+                            $("#" + data.evrakTipiID + "").html("Evrak Gönderilemedi");
+                            console.log(data.error);
+                        }
                     },
                     error: function (data) {
                         $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-success");
@@ -227,7 +242,7 @@
 
         $( ".fileInput" ).change(function(e) {
        var fileName = e.target.files[0].name;
-          $(this).prev().text(" 1 dosya seçildi -- "+fileName );
+          $(this).prev().prev().text(" 1 dosya seçildi -- "+fileName );
 
           $("#" + $(this).attr("submitID")).removeAttr("disabled");
         });

@@ -12,15 +12,8 @@ namespace YurtDb.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class ogrenci
+    public partial class ogrenciApi
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ogrenci()
-        {
-            this.evrakBilgileri = new HashSet<evrakBilgileri>();
-            this.Kayıt = new HashSet<Kayıt>();
-        }
-    
         public string ogrenciNo { get; set; }
         public Nullable<long> tcNo { get; set; }
         public string adi { get; set; }
@@ -29,12 +22,5 @@ namespace YurtDb.DB
         public string fakulteNo { get; set; }
         public string bolumNo { get; set; }
         public string cinsiyet { get; set; }
-        public Nullable<int> donemTipiID { get; set; }
-    
-        public virtual donemTipi donemTipi { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<evrakBilgileri> evrakBilgileri { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Kayıt> Kayıt { get; set; }
     }
 }

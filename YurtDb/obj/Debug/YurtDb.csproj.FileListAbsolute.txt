@@ -26,9 +26,10 @@ C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\tr\System.Web.Webpages.Deployment.
 C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\tr\System.Web.Webpages.Razor.resources.dll
 C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\tr\System.Web.Helpers.resources.dll
 C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\tr\System.Web.Mvc.resources.dll
-C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.csprojResolveAssemblyReference.cache
 C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.csproj.CoreCompileInputs.cache
 C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.dll
 C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.pdb
 C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\Newtonsoft.Json.dll
 C:\Users\Semih\source\repos\YurtDb\YurtDb\bin\Newtonsoft.Json.xml
+C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.csprojAssemblyReference.cache
+C:\Users\Semih\source\repos\YurtDb\YurtDb\obj\Debug\YurtDb.csproj.CopyComplete

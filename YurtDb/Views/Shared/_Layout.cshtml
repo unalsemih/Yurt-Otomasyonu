@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
+<style>
+
+</style>
 <body>
 
 
@@ -19,237 +22,17 @@
     </div>
 
 
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+   @* <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-
-    <script>
-       @if (false) {
-    /*$(".adimBtn").removeClass("btn-primary");
-    $(".adimBtn").removeClass("btn-outline-primary");
-
-           var adim = @Model.basvuruAdimi;
-        $("#adim" + @Model.basvuruAdimi+"").addClass("btn-primary");
-        for (var i = 0; i < 6; i++)
-            if(i!=@Model.basvuruAdimi)
-            $("#adim" + i+"").addClass("btn-outline-primary");
-    */
-      }
-    </script>
+       *@
+  
 
 
     <script>
-    $(".adimBtn").removeClass("btn-primary");
-    $(".adimBtn").removeClass("btn-outline-primary");
-    var adim = @Model.basvuruAdimi;
-        $(".adimBtn").addClass("btn-primary");
-        for (var i = 0; i < 6; i++)
-            if (i >@Model.basvuruAdimi)
-            {
-                $("#adim" + i + "").removeClass("btn-primary");
-                $("#adim" + i + "").addClass("btn-outline-primary");
-              
-                $("#adim" + i + "").attr("disabled","disabled");
-
-            }
+   
     </script>
 
 
-    <script>
-        $(document).ready(function () {
-
-
-
-
-
-
-            if ($("#öncelikCombobox").css("visibility") != "hidden")
-                $("#odaSecimSubmitBtn").css("display", "block");
-            if ($("#öncelikCombobox").css("visibility") == "hidden")
-                $("#odaTipleri").append('<option selected="true" disabled>Oda Seçiniz</option>');
-            /*   Combobox   */
-            // let dropdown = $('#odaTipleri');
-
-            //  dropdown.empty();
-
-            //  dropdown.append('<option selected="true" disabled>Oda Seçiniz</option>');
-            //  dropdown.prop('selectedIndex', 0);
-
-            //  const url = '@Url.Action("getRooms", "Home")';
-            //  console.log(url);
-            // Populate dropdown with list of provinces
-            /*  $.getJSON(url, function (data) {
-                  $.each(data, function (key, entry) {
-                      dropdown.append($('<option></option>').attr('value', entry.odaTipiID).text(entry.adi));
-                  })
-              });
-      */
-
-
-
-
-            @*
-        let indirimler = $('#indirimTipleri');
-
-        indirimler.empty();
-
-
-
-
-        var id = $("#odaTipleri").val();
-        const url2 = '@Url.Action("indirimler", "Home")';
-        $.getJSON(url2, function (data) {
-            $.each(data, function (key, entry) {
-                indirimler.append($('<option></option>').attr('value', entry.indirimlerID).text(entry.aciklama));
-                if (entry.indirimId == 1)
-                    $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
-                console.log(entry.indirimId);
-            })
-            indirimler.prop('selectedIndex', 0);
-        });
-
-
-                *@
-
-            $(".inputDocument").click(function () {
-
-                var input = $(this).next().next().next().click();
-
-            });
-
-
-
-
-            $("#sorgulaBtn").click(function () {
-                if ($("#tcNo").val().length != 11) {
-                    alert("TC giriniz!");
-                }
-                else {
-                    $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
-                    $(this).attr("disabled", "disabled");
-                    let dropdown = $('#egitimTipleri');
-
-                    dropdown.empty();
-                    dropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
-                    const url2 = '@Url.Action("tcOgrenciSorgulama", "Home")' + "?tcNo=" + $("#tcNo").val().toString();
-                    // Populate dropdown with list of provinces
-
-                    $.getJSON(url2, function (data) {
-                        var count = Object.keys(data).length;
-                        if (count > 0) {
-                            $.each(data, function (key, entry) {
-
-                                dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
-
-
-                            })
-                            dropdown.prop('selectedIndex', 0);
-                            $("#ogrenciCombobox").css("display", "block");
-                            $("#tcNo").attr("readonly", "readonly");
-                            //     $("#nextBtn").css("display","block");
-                            $("#sorgulaBtn").css("display", "none");
-                        }
-                        else if (count == 1) {
-                            $("#nextBtn").click();
-                        }
-                    });
-                }
-                
-            });
-
-
-            $(".adimBtn").click(function () {
-
-                const url2 = '@Url.Action("changeForm", "Home")' + "?number=" + $(this).attr("number").toString();
-                window.location = url2;
-
-            });
-
-            $(".evrakSubmitBtn").click(function () {
-                $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
-                $("#evrakForm" + $(this).attr('id')).submit();
-
-            });
-
-
-            /* Evrak Upload ... */
-
-            $(".evrakForm").on("submit", function (event){
-                event.preventDefault();
-                var url = $(this).attr("action");
-                var formData = new FormData($('form').get(0));
-               // console.log(formData);
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    dataType: "JSON",
-                    data: formData,
-                    contentType: false,//file null dönememsi için 
-                    processData: false,
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.error == "") {
-                            console.log("başarılı" + data);
-                            $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-danger");
-                            $("#dosyaDurum_" + data.evrakTipiID).addClass("text-success");
-
-                            $("#dosyaDurum_" + data.evrakTipiID).text("Evrak Gönderildi!");
-                            $("#" + data.evrakTipiID + "").attr("disabled", "disabled");
-                            $("#" + data.evrakTipiID + "").html("Dosya Gönderildi");
-                            $("#btnEvrakGoster_" + data.evrakTipiID + "").css("display", "block");
-                            if (data.kalanEvrakSayisi == 0)
-                                $("#kayitTamamlaBtn").css("display","inline-block");
-                        }
-                        else {
-                            $("#" + data.evrakTipiID + "").html("Evrak Gönderilemedi");
-                            console.log(data.error);
-                        }
-                    },
-                    error: function (data) {
-                        $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-success");
-                        $("#dosyaDurum_" + data.evrakTipiID).addClass("text-danger");
-                        $("#dosyaDurum_" + data.evrakTipiID).text("Evrak gönderilemedi!");
-                    }
-                    
-                });
-
-
-            });
-
-
-    });
-
-    function egitimTipleriChange(){
-       $("#nextBtn").css("display","block");
-    }
-
-
-    function odaTipleriComboboxChange() {
-
-    $('#öncelikCombobox').css('visibility', 'visible');
-    const url = '@Url.Action("getPrice", "Home")' + "?odaTipiID=" + $("#odaTipleri").val() + "&indirimID=" + $("#indirimTipleri").val();
-    console.log(url);
-    $.getJSON(url, function (data) {
-    $.each(data, function (key, entry) {
-    $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
-        console.log("fiyat:" + entry.fiyat);
-        $("#odaSecimSubmitBtn").css("display", "block");
-    })
-    });
-
-
-
-    }
-
-        $( ".fileInput" ).change(function(e) {
-       var fileName = e.target.files[0].name;
-          $(this).prev().prev().text(" 1 dosya seçildi -- "+fileName );
-
-          $("#" + $(this).attr("submitID")).removeAttr("disabled");
-        });
-
-
-
-
-    </script>
+    
 </body>
 </html>

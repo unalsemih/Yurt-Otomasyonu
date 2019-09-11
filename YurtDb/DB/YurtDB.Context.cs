@@ -12,6 +12,8 @@ namespace YurtDb.DB
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class YurtDBEntities : DbContext
     {
@@ -25,6 +27,7 @@ namespace YurtDb.DB
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<basvurular> basvurular { get; set; }
         public virtual DbSet<Donem> Donem { get; set; }
         public virtual DbSet<donemTipi> donemTipi { get; set; }
         public virtual DbSet<evrakBilgileri> evrakBilgileri { get; set; }
@@ -36,5 +39,31 @@ namespace YurtDb.DB
         public virtual DbSet<odaTipiKontenjan> odaTipiKontenjan { get; set; }
         public virtual DbSet<ogrenci> ogrenci { get; set; }
         public virtual DbSet<ogrenciApi> ogrenciApi { get; set; }
+    
+        public virtual int basvur(string ogrenciNo, Nullable<int> odaTipiID, string cinsiyet, ObjectParameter islemDurumu)
+        {
+            var ogrenciNoParameter = ogrenciNo != null ?
+                new ObjectParameter("ogrenciNo", ogrenciNo) :
+                new ObjectParameter("ogrenciNo", typeof(string));
+    
+            var odaTipiIDParameter = odaTipiID.HasValue ?
+                new ObjectParameter("odaTipiID", odaTipiID) :
+                new ObjectParameter("odaTipiID", typeof(int));
+    
+            var cinsiyetParameter = cinsiyet != null ?
+                new ObjectParameter("cinsiyet", cinsiyet) :
+                new ObjectParameter("cinsiyet", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("basvur", ogrenciNoParameter, odaTipiIDParameter, cinsiyetParameter, islemDurumu);
+        }
+    
+        public virtual ObjectResult<kontenjanSayisi_Result> kontenjanSayisi(string cinsiyet)
+        {
+            var cinsiyetParameter = cinsiyet != null ?
+                new ObjectParameter("cinsiyet", cinsiyet) :
+                new ObjectParameter("cinsiyet", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<kontenjanSayisi_Result>("kontenjanSayisi", cinsiyetParameter);
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace YurtDb.Models
         public List<int> yuklenenEvraklar { get; set; }
         public double odaFiyati { get; set; }
         public List<OdaKontenjan> odaKontenjanList { get; set; }
+
+        public DB.basvurular basvuruTabloBilgisi { get; set; }
         public int odaFiyatlariId { get; set; }
     }
 }

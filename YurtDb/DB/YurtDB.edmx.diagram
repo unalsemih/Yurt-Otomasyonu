@@ -4,7 +4,8 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8e7fc2f96ddc4393a9d08d494656c1bb" Name="Diagram1">
+      <Diagram DiagramId="50a75a4f5401433b95769ba3e039359f" Name="Diagram1">
+        <EntityTypeShape EntityType="YurtDBModel.basvurular" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="YurtDBModel.Donem" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="YurtDBModel.donemTipi" Width="1.5" PointX="0.75" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="YurtDBModel.evrakBilgileri" Width="1.5" PointX="5.25" PointY="15.75" IsExpanded="true" />
@@ -15,7 +16,7 @@
         <EntityTypeShape EntityType="YurtDBModel.odaTipi" Width="1.5" PointX="3" PointY="17.375" IsExpanded="true" />
         <EntityTypeShape EntityType="YurtDBModel.odaTipiKontenjan" Width="1.5" PointX="8.25" PointY="13.875" IsExpanded="true" />
         <EntityTypeShape EntityType="YurtDBModel.ogrenci" Width="1.5" PointX="3" PointY="20.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="YurtDBModel.ogrenciApi" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="YurtDBModel.ogrenciApi" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="YurtDBModel.FK__Donem__donemTipi__1273C1CD" ManuallyRouted="false" />
         <AssociationConnector Association="YurtDBModel.FK__evrakBilg__donem__2B3F6F97" ManuallyRouted="false" />
         <AssociationConnector Association="YurtDBModel.FK__evrakTipi__donem__267ABA7A" ManuallyRouted="false" />

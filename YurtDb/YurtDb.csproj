@@ -169,7 +169,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DB\basvurular.cs">
+      <DependentUpon>YurtDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DB\Donem.cs">
       <DependentUpon>YurtDB.tt</DependentUpon>
     </Compile>
@@ -186,6 +190,9 @@
       <DependentUpon>YurtDB.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\Kayıt.cs">
+      <DependentUpon>YurtDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\kontenjanSayisi_Result.cs">
       <DependentUpon>YurtDB.tt</DependentUpon>
     </Compile>
     <Compile Include="DB\odaFiyatlari.cs">
@@ -245,6 +252,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Views\Home\BasvuruBilgileri.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

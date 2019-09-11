@@ -1,0 +1,154 @@
+﻿
+<style>
+
+  
+    body {
+        background-color: #eee;
+    }
+
+    .form-control:focus {
+        border-color: #cccccc;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-color: dodgerblue;
+        border-width: 2px;
+    }
+
+    .btn {
+        border-width: 0px !important;
+    }
+
+        .btn.focus,
+        .btn:focus,
+        .btn:active {
+            box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08) !important;
+            transition: 50ms;
+        }
+
+        .btn:not(:disabled):not(.disabled).active,
+        .btn:not(:disabled):not(.disabled):active,
+        .show > .btn.dropdown-toggle {
+            box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08) !important;
+            transition: 50ms;
+        }
+</style>
+<div class="col-md-10 offset-md-1">
+    <div class="card">
+        <h5 class="card-header">Form</h5>
+        <div class="card-body" style="min-height:500px;">
+            <div class="col-md-12 mb-5">
+                <div class="row" id="themeHeader" style=" background-color: rgba(200, 200, 200, 0.2);">
+                    <div class=" p-0" style="position:absolute; z-index:5;" id="themeHeaderSelected"><button class="btn w-100" id="orangeBtn" style="transform:scale(1.05); box-shadow: 0 16px 26px -10px rgba(244, 67, 54, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2); background-color:#f44336; color:#ffffff; font-size:12px; font-weight:500;">Dönem Tipi</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="0">Dönem Tipi</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="1">Dönem Bilgileri</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="2">Bilgileri Kaydet</button></div>
+
+                </div>
+            </div>
+
+            <form style="" id="form0">
+                
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style="margin:auto;" placeholder="Dönem Adını Giriniz">
+                            @*Html.dat(model => model.ogrenciBilgileri.ogrenciNo, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "text" } })
+                                *@
+                        </div>
+                    </div>
+                
+            </form>
+
+            <form style="" id="form1">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style="margin:auto;" placeholder="Dönem Adını Giriniz">
+                        @*Html.dat(model => model.ogrenciBilgileri.ogrenciNo, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "text" } })
+                        *@
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style="margin:auto;" placeholder="Dönem Adını Giriniz">
+                        @*Html.dat(model => model.ogrenciBilgileri.ogrenciNo, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "text" } })
+                        *@
+                    </div>
+                </div>
+                
+            </form>
+
+            <div class="col-md-12 col-12 col-sm-12">
+                <button class="btn btn-secondary" style="position:absolute;">Geri</button>
+                <button id="ileriBtn" class="btn btn-secondary" style="position:absolute; right:0; background-color:#f44336;">İleri</button>
+            </div>
+        </div>
+    </div>
+</div>
+            
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        var aktifBolum = 1;
+        $("form").css("display", "none");
+        $("#form" + (aktifBolum-1).toString()).css("display", "block");
+        var themeHeaderLeft = parseFloat($("#themeHeaderSelected").css("left"));
+        var themeHeaderWidth = parseFloat($("#themeHeader").css("width"));
+        var itemWidth = themeHeaderWidth / 3;
+        console.log(themeHeaderWidth);
+        console.log(itemWidth);
+
+        $("#themeHeaderSelected").css("width", itemWidth);
+        //  $("#themeHeaderSelected").css("cssText", "width:"+ itemWidth +" !important;");
+        $(".themeHeaderItem").click(function () {
+            //$("#themeHeaderSelected").css("left", parseFloat($(this).attr("adim")) * itemWidth + 15,2000);
+
+            var element = $(this);
+            $("#themeHeaderSelected").css({
+                "transition": "all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s",
+                "left": (parseFloat($(this).attr("adim")) * itemWidth + themeHeaderLeft)
+            });
+            var form = "#form"+element.attr("adim");
+            $("form").css("display", "none");
+            $(form.toString()).css("display", "block");
+            console.log("form" + $(this).attr("adim") + "");
+            setTimeout(function () { $("#orangeBtn").text(element.text()); }, 200);
+
+            aktifBolum = $(this).attr("adim");
+            /*
+            var element = $(this);
+            $("#themeHeaderSelected").animate({
+                left: (parseFloat($(this).attr("adim")) * itemWidth + themeHeaderLeft),
+            }, 300, function () {
+                    console.log(element.text());
+                  $("#orangeBtn").text(element.text());
+            });
+            */
+        });
+
+
+        $("#ileriBtn").click(function () {
+            if (aktifBolum != 3)
+                $("button[adim='" + aktifBolum + "']").click();
+            aktifBolum++;
+            if (aktifBolum==3)
+                $(this).text("Bitir");
+        });
+
+        $(window).resize(function () {
+          //  aktifBolum = 0;
+
+            themeHeaderLeft = parseFloat($("#themeHeaderSelected").css("left"));
+            themeHeaderWidth = parseFloat($("#themeHeader").css("width"));
+            itemWidth = themeHeaderWidth / 3;
+            console.log(themeHeaderWidth);
+            console.log(itemWidth);
+
+        $("#themeHeaderSelected").css("width", itemWidth);
+
+        });
+    });
+
+</script>

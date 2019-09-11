@@ -1,6 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="YurtDBModelStoreContainer" CdmEntityContainer="YurtDBEntities">
+    <EntitySetMapping Name="basvurular">
+      <EntityTypeMapping TypeName="YurtDBModel.basvurular">
+        <MappingFragment StoreEntitySet="basvurular">
+          <ScalarProperty Name="basvuruID" ColumnName="basvuruID" />
+          <ScalarProperty Name="ogrenciNo" ColumnName="ogrenciNo" />
+          <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
+          <ScalarProperty Name="baslangicTarihi" ColumnName="baslangicTarihi" />
+          <ScalarProperty Name="bitisTarihi" ColumnName="bitisTarihi" />
+          <ScalarProperty Name="durum" ColumnName="durum" />
+          <ScalarProperty Name="cinsiyet" ColumnName="cinsiyet" />
+          <ScalarProperty Name="IpAdresi" ColumnName="IpAdresi" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Donem">
       <EntityTypeMapping TypeName="YurtDBModel.Donem">
         <MappingFragment StoreEntitySet="Donem">
@@ -129,5 +143,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="basvur" FunctionName="YurtDBModel.Store.basvur" />
+    <FunctionImportMapping FunctionImportName="kontenjanSayisi" FunctionName="YurtDBModel.Store.kontenjanSayisi">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="YurtDBModel.kontenjanSayisi_Result">
+          <ScalarProperty Name="toplamKontenjan" ColumnName="toplamKontenjan" />
+          <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
+          <ScalarProperty Name="adi" ColumnName="adi" />
+          <ScalarProperty Name="bosKontenjan" ColumnName="bosKontenjan" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

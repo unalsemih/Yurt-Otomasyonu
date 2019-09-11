@@ -5,6 +5,19 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="YurtDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="basvurular">
+          <Key>
+            <PropertyRef Name="basvuruID" />
+          </Key>
+          <Property Name="basvuruID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ogrenciNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="odaTipiID" Type="int" />
+          <Property Name="baslangicTarihi" Type="datetime" />
+          <Property Name="bitisTarihi" Type="datetime" />
+          <Property Name="durum" Type="int" />
+          <Property Name="cinsiyet" Type="varchar" MaxLength="5" />
+          <Property Name="IpAdresi" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Donem">
           <Key>
             <PropertyRef Name="id" />
@@ -314,7 +327,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="basvur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ogrenciNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="odaTipiID" Type="int" Mode="In" />
+          <Parameter Name="cinsiyet" Type="varchar" Mode="In" />
+          <Parameter Name="islemDurumu" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="kontenjanSayisi" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="cinsiyet" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="YurtDBModelStoreContainer">
+          <EntitySet Name="basvurular" EntityType="Self.basvurular" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Donem" EntityType="Self.Donem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="donemTipi" EntityType="Self.donemTipi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" Schema="dbo" store:Type="Tables" />
@@ -396,6 +419,19 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="YurtDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="basvurular">
+          <Key>
+            <PropertyRef Name="basvuruID" />
+          </Key>
+          <Property Name="basvuruID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ogrenciNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="odaTipiID" Type="Int32" />
+          <Property Name="baslangicTarihi" Type="DateTime" Precision="3" />
+          <Property Name="bitisTarihi" Type="DateTime" Precision="3" />
+          <Property Name="durum" Type="Int32" />
+          <Property Name="cinsiyet" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="IpAdresi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Donem">
           <Key>
             <PropertyRef Name="id" />
@@ -738,6 +774,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="YurtDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="basvurular" EntityType="Self.basvurular" />
           <EntitySet Name="Donem" EntityType="Self.Donem" />
           <EntitySet Name="donemTipi" EntityType="Self.donemTipi" />
           <EntitySet Name="evrakBilgileri" EntityType="Self.evrakBilgileri" />
@@ -813,13 +850,42 @@
             <End Role="odaTipi" EntitySet="odaTipi" />
             <End Role="odaTipiKontenjan" EntitySet="odaTipiKontenjan" />
           </AssociationSet>
+          <FunctionImport Name="basvur">
+            <Parameter Name="ogrenciNo" Mode="In" Type="String" />
+            <Parameter Name="odaTipiID" Mode="In" Type="Int32" />
+            <Parameter Name="cinsiyet" Mode="In" Type="String" />
+            <Parameter Name="islemDurumu" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="kontenjanSayisi" ReturnType="Collection(YurtDBModel.kontenjanSayisi_Result)">
+            <Parameter Name="cinsiyet" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="kontenjanSayisi_Result">
+          <Property Type="Int32" Name="toplamKontenjan" Nullable="true" />
+          <Property Type="Int32" Name="odaTipiID" Nullable="true" />
+          <Property Type="String" Name="adi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="bosKontenjan" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="YurtDBModelStoreContainer" CdmEntityContainer="YurtDBEntities">
+          <EntitySetMapping Name="basvurular">
+            <EntityTypeMapping TypeName="YurtDBModel.basvurular">
+              <MappingFragment StoreEntitySet="basvurular">
+                <ScalarProperty Name="basvuruID" ColumnName="basvuruID" />
+                <ScalarProperty Name="ogrenciNo" ColumnName="ogrenciNo" />
+                <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
+                <ScalarProperty Name="baslangicTarihi" ColumnName="baslangicTarihi" />
+                <ScalarProperty Name="bitisTarihi" ColumnName="bitisTarihi" />
+                <ScalarProperty Name="durum" ColumnName="durum" />
+                <ScalarProperty Name="cinsiyet" ColumnName="cinsiyet" />
+                <ScalarProperty Name="IpAdresi" ColumnName="IpAdresi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Donem">
             <EntityTypeMapping TypeName="YurtDBModel.Donem">
               <MappingFragment StoreEntitySet="Donem">
@@ -948,6 +1014,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="basvur" FunctionName="YurtDBModel.Store.basvur" />
+          <FunctionImportMapping FunctionImportName="kontenjanSayisi" FunctionName="YurtDBModel.Store.kontenjanSayisi">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="YurtDBModel.kontenjanSayisi_Result">
+                <ScalarProperty Name="toplamKontenjan" ColumnName="toplamKontenjan" />
+                <ScalarProperty Name="odaTipiID" ColumnName="odaTipiID" />
+                <ScalarProperty Name="adi" ColumnName="adi" />
+                <ScalarProperty Name="bosKontenjan" ColumnName="bosKontenjan" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

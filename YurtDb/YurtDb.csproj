@@ -228,7 +228,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AdminModels\OdaBilgileriModel.cs" />
     <Compile Include="Models\BasvuruFormu.cs" />
+    <Compile Include="Models\AdminModels\DonemOdaEvrakBilgileri.cs" />
     <Compile Include="Models\OdaKontenjan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

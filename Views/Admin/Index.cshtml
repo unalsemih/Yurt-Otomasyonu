@@ -1,0 +1,1025 @@
+﻿@model YurtDb.Models.DonemOdaEvrakBilgileri
+
+<link href="~/Plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.css" rel="stylesheet" />
+<style>
+
+
+    body {
+        background-color: #eee;
+    }
+
+    .form-control:focus {
+        border-color: #cccccc;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-color: dodgerblue;
+        border-width: 2px;
+    }
+
+    .btn {
+        border-width: 0px !important;
+    }
+
+        .btn.focus,
+        .btn:focus,
+        .btn:active {
+            box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08) !important;
+            transition: 50ms;
+        }
+
+        .btn:not(:disabled):not(.disabled).active,
+        .btn:not(:disabled):not(.disabled):active,
+        .show > .btn.dropdown-toggle {
+            box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08) !important;
+            transition: 50ms;
+        }
+</style>
+<div class="col-md-12 ">
+    <div class="card">
+        <h5 class="card-header">Form</h5>
+        <div class="card-body" style="min-height:500px;">
+            <div class="col-md-12 mb-5">
+                <div class="row" id="themeHeader" style=" background-color: rgba(200, 200, 200, 0.2);">
+                    <div class=" p-0" style="position:absolute; z-index:5; transition: all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s" id="themeHeaderSelected"><button class="btn w-100" id="orangeBtn" style="transform:scale(1.05); box-shadow: 0 16px 26px -10px rgba(244, 67, 54, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2); background-color:#f44336; color:#ffffff; font-size:12px; font-weight:500;">Dönem Tipi</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="0">Dönem Tipi</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="1">Oda Bilgileri</button></div>
+                    <div class="col-md-4 col-sm-4 col-4 p-0"><button class="btn w-100 themeHeaderItem" style="background-color:transparent; color:#555; font-size:12px; font-weight:500;" adim="2">Evrak Bilgileri</button></div>
+
+                </div>
+            </div>
+            <form class="form-group col-md-12" id="form0">
+
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><span class="fa fa-plus"></span> Dönem Ekle</button>
+                    @*
+                        <select class="form-control" id="donemBilgileriCombobox" onchange="" style="margin:auto;">
+                            <option>Dönem Seçiniz</option>
+                        </select>
+                    *@
+                    <table id="donemTable" class="table table-striped" style="font-size:10pt; text-align:center; vertical-align:middle">
+                        <thead class="">
+                            <tr>
+
+                                <th scope="col">Seç</th>
+                                <th scope="col" class="donemTipiID">Dönem Tipi ID</th>
+                                <th scope="col">Dönem Tipi Adı</th>
+                                <th scope="col" class="donemID">Dönem ID</th>
+                                <th scope="col">Dönem Adı</th>
+                                <th scope="col">Başlangıç Tarihi</th>
+                                <th scope="col">Bitiş Tarihi</th>
+                                <th scope="col">Aktif Dönem</th>
+                                <th scope="col">Düzenle</th>
+                                <th scope="col">Arşivle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <button type="button" class="btn btn-success mt-4" style="position:absolute; right:0px; background-color:#f44336; display:none;" id="ileriBtnForm0">İleri</button>
+            </form>
+
+
+            <form action="/" method="post" id="form1">
+                <div class="col-md-12 text-center">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="$('#odaEkleModal').modal('show'); $('#odaEkleForm').css('display','block')">Oda Tipi Ekle</button>
+
+                    @*
+                        <div class="offset-md-4 col-md-3 mb-4">
+                            <input type="text" id="odaTipiText" placeholder="Oda Tipi Giriniz" name="odaTipi" value="" class="form-control" />
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" id="odaTipiOlustur" class="btn btn-success"><span class="fa fa-plus"></span> </button>
+
+                        </div>
+                    *@
+
+                </div>
+
+                <div class="offset-md-1 col-md-10">
+
+                    <table id="roomTable" class="table table-striped" style="font-size:10pt; text-align:center; vertical-align:middle">
+                        <thead class="">
+                            <tr>
+                                <th scope="col">Oda Adı</th>
+                                <th scope="col">Oda Tipi Id</th>
+                                <th scope="col">Oda Tipi Kontenjan Id</th>
+                                <th scope="col">Erkek Kontenjan</th>
+                                <th scope="col">Kız Kontenjan</th>
+                                <th scope="col">Kontrol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 text-center">
+                    <button type="button" id="odaBilgileriBtn" class="btn btn-success btn-sm ">Kaydet ve Devam Et</button>
+                </div>
+
+                <div class="col-md-12 col-12 col-sm-12 mb-4">
+                    <button type="button" class="btn btn-secondary btn-sm" style="position:absolute;" id="geriBtnForm1">Geri</button>
+                    <button type="button" class="btn btn-success btn-sm text-right" style="position:absolute; right:0; background-color:#f44336;" id="ileriBtnForm1">İleri</button>
+
+                </div>
+            </form>
+
+            <form action="/" method="post" id="form2">
+                <div class="row">
+
+                    <div class="offset-md-4 col-md-3 mb-4">
+                        <input type="text" id="evrakTipiText" placeholder="Evrak Tipi Giriniz" name="evrakTipi" value="" class="form-control" />
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="button" id="evrakTipiOlustur" class="btn btn-success"><span class="fa fa-plus"></span> </button>
+
+                    </div>
+                </div>
+
+                <div class="offset-md-1 col-md-10">
+
+                    <table id="evrakTablosu" class="table table-striped" style="font-size:10pt; text-align:center; vertical-align:middle">
+                        <thead class="">
+                            <tr>
+                                <th scope="col">Evrak Tipi Id</th>
+                                <th scope="col">Evrak Adı</th>
+                                <th scope="col">Zorunluluk</th>
+                                <th scope="col">Evrak Bilgileri</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 text-center">
+                    <button type="button" id="evrakTipleriBtn" class="btn btn-success btn-sm ">Kaydet ve Devam Et</button>
+                </div>
+
+                <div class="col-md-12 col-12 col-sm-12 mb-4">
+                    <button type="button" class="btn btn-secondary btn-sm" style="position:absolute;" id="geriBtnForm2">Geri</button>
+                    <button type="button" class="btn btn-success btn-sm text-right" style="position:absolute; right:0; background-color:#f44336;" id="ileriBtnForm2">İleri</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Dönem Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class=" py-5" method="post" id="donemEkleForm">
+
+                    <div class="col-md-12">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <label for="formGroupExampleInput">Dönem Tipi Adı</label>
+                                @Html.EditorFor(model => model.donemTipi.adi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Dönem Tipi Adı", type = "text" } })
+                            </div>
+                            <div class="col-md-6">
+                                <label for="formGroupExampleInput">Dönem Adı</label>
+                                @Html.EditorFor(model => model.donemBilgisi.donemAdi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Dönem Adı", type = "text" } })
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6" style="margin-left:auto; margin-right:auto;">
+                                <label for="formGroupExampleInput">Başlangıç Tarihi</label>
+                                @Html.EditorFor(model => model.donemBilgisi.baslangicTarihi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "date" } })
+                            </div>
+                            <div class="col-md-6" style="margin-left:auto; margin-right:auto;">
+                                <label for="formGroupExampleInput">Bitiş Tarihi</label>
+                                @Html.EditorFor(model => model.donemBilgisi.bitisTarihi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "date" } })
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" style="display:none;">Submit</button>
+                    <div class="col-md-12 col-12 col-sm-12 text-center mt-4">
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnDonemEkleme" class="btn btn-success btn-sm">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="duzenleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Dönem Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class=" py-5" method="post" id="donemGuncelleForm">
+                    <input id="donemIdEdit" type="hidden" name="donemId" value="-1" />
+                    <div class="col-md-12">
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <label for="formGroupExampleInput">Dönem Tipi Adı</label>
+                                <input id="donemTipiAdiEdit" type="text" name="donemTipiAdi" value="" required class="form-control" placeholder="Dönem Tipi Adı" />
+                            </div>
+                            <div class="col-md-6">
+                                <label for="formGroupExampleInput">Dönem Adı</label>
+                                <input id="donemAdiEdit" type="text" name="donemAdi" value="" required class="form-control" placeholder="Dönem Adı" />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6" style="margin-left:auto; margin-right:auto;">
+                                <label for="formGroupExampleInput">Başlangıç Tarihi</label>
+                                <input id="baslangicTarihiEdit" type="date" name="baslangicTarihi" required class="form-control" placeholder="Dönem Adı" />
+                            </div>
+                            <div class="col-md-6" style="margin-left:auto; margin-right:auto;">
+                                <label for="formGroupExampleInput">Bitiş Tarihi</label>
+                                <input id="bitisTarihiEdit" type="date" name="bitisTarihi" required class="form-control" placeholder="Dönem Adı" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" style="display:none;">Submit</button>
+                    <div class="col-md-12 col-12 col-sm-12 text-center mt-4">
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnDonemGuncelle" class="btn btn-success btn-sm">Düzenle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="odaEkleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Oda Tipi Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class=" py-1" method="post" id="odaEkleForm">
+
+                    <div class="col-md-12">
+                        
+
+                            <div class="offset-md-2 col-md-8 mb-2">
+                                <label>Oda Tipi Giriniz</label>
+                               <input type="text" id="odaTipiAdi" placeholder="Oda Tipi Giriniz" required name="odaTipi" value="" class="form-control" />
+                            </div>
+                            <div class="offset-md-2 col-md-8 mb-2">
+                                <label>Erkek Kontenjan</label>
+                                <input type="number" id="erkekKontenjanModal" placeholder="Erkek Kontenjan" required name="erkekKontenjan" value="0" min="0" class="form-control" />
+                            </div>
+                            <div class="offset-md-2 col-md-8">
+                                <label>Kız Kontenjan</label>
+                                <input type="number" id="kizKontenjanModal" placeholder="Kız Kontenjan" required name="kizKontenjan" value="0" min="0" class="form-control" />
+                            </div>
+                       
+                    </div>
+                    <br />
+                  
+
+                    <button type="submit" style="display:none;">Submit</button>
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnOdaEkleme" class="btn btn-success btn-sm">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<button id="denemeBtn">deneme ekleme</button>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+       
+
+    $('#donemTable thead tr th.donemTipiID,#donemTable thead tr th.donemID').hide();
+
+        ///DataTable
+      //  $("#evrakTablosu").DataTable();
+
+        ///DataTable
+
+
+
+
+
+        var aktifBolum = 1;
+        $("form").css("display", "none");
+        $("#donemEkleForm").css("display","block");
+        $("#odaEkleForm").css("display","block");
+        $("#form" + (aktifBolum - 1).toString()).css("display", "block");
+        var themeHeaderLeft = parseFloat($("#themeHeaderSelected").css("left"));
+        var themeHeaderWidth = parseFloat($("#themeHeader").css("width"));
+        var itemWidth = themeHeaderWidth / 3;
+        console.log(themeHeaderWidth);
+        console.log(itemWidth);
+
+        $("#themeHeaderSelected").css("width", itemWidth);
+        $("#themeHeaderSelected").css("left", themeHeaderLeft);
+        //  $("#themeHeaderSelected").css("cssText", "width:"+ itemWidth +" !important;");
+        $(".themeHeaderItem").click(function () {
+            //$("#themeHeaderSelected").css("left", parseFloat($(this).attr("adim")) * itemWidth + 15,2000);
+
+            var element = $(this);
+            $("#themeHeaderSelected").css({
+                //    "transition": "all 0.5s cubic-bezier(0.29, 1.42, 0.79, 1) 0s",
+                "left": (parseFloat($(this).attr("adim")) * itemWidth + themeHeaderLeft)
+            });
+            var form = "#form" + element.attr("adim");
+            $("form").css("display", "none");
+            $(form.toString()).css("display", "block");
+            console.log("form" + $(this).attr("adim") + "");
+            setTimeout(function () { $("#orangeBtn").text(element.text()); }, 200);
+
+            aktifBolum = $(this).attr("adim");
+            /*
+            var element = $(this);
+            $("#themeHeaderSelected").animate({
+                left: (parseFloat($(this).attr("adim")) * itemWidth + themeHeaderLeft),
+            }, 300, function () {
+                    console.log(element.text());
+                  $("#orangeBtn").text(element.text());
+            });
+            */
+        });
+
+
+        $("#ileriBtn").click(function () {
+            if (aktifBolum != 3)
+                $("button[adim='" + aktifBolum + "']").click();
+            aktifBolum++;
+            if (aktifBolum == 3)
+                $(this).text("Bitir");
+        });
+
+        $(window).resize(function () {
+            //  aktifBolum = 0;
+
+            themeHeaderLeft = parseFloat($("#themeHeaderSelected").css("left"));
+            themeHeaderWidth = parseFloat($("#themeHeader").css("width"));
+            itemWidth = themeHeaderWidth / 3;
+            console.log(themeHeaderWidth);
+            console.log(itemWidth);
+
+            $("#themeHeaderSelected").css("width", itemWidth);
+
+        });
+
+        $("#btnOdaEkleme").click(function () {
+            $("#odaEkleForm").find('[type="submit"]').trigger('click');
+       
+        });
+         $("#denemeBtn").click(function () {
+            roomTable.row.add(['selam','ad','','','','<button class="btn btn-primary">Selam ÇAK</button>']).draw();
+         });
+
+        function yeniSatirEkle() {
+
+        }
+
+          $("#odaEkleForm").on("submit", function (event) {
+            event.preventDefault();
+
+              var roomData = {
+                  donemTipiId: secilenDonemId, odaTipiId: -1, odaTipiKontenjanId: -1, erkekKontenjan: $("#erkekKontenjanModal").val(), kizKontenjan: $("#kizKontenjanModal").val(), odaAdi: $("#odaTipiAdi").val()
+              };
+              $.ajax({
+                  url: '@Url.Action("odaTipiEkle", "Admin")', //
+
+                  data: JSON.stringify(roomData),
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log(data) ;
+                    if (data.durum == "true")
+                    {
+                        alert("Kayıt İşlemi Başarılı");
+                        roomTable.row.add(["<input type='text' class='form-control' value='" + roomData.odaAdi + "'>", "" + data.odaTipiId + "", "" + data.odaTipiKontenjanId + "", "<input id='row' type='number' value='" + roomData.erkekKontenjan + "' class='form-control erkekSayisi' style='width:90px; margin:auto; vertical-align:middle;' min='0' >", "<input type='number'  value='" + roomData.kizKontenjan + "' class='kizSayisi form-control' style='width:90px;  margin:auto; vertical-align:middle;' min='0' >", "<button id='odaSilBtn" + data.odaTipiId + "' odaTipiId='" + data.odaTipiId + "' odaTipiKontenjanId='" + data.odaTipiKontenjanId + "' class='btn btn-danger btn-sm' type='button'>Sil</button>"]).draw()
+                                                console.log("odaSilBtn" + data.odaTipiId + "");
+                        document.getElementById("odaSilBtn" + data.odaTipiId + "").addEventListener("click", odaSil);
+
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+           
+       
+
+        });
+        $("#btnDonemEkleme").click(function () {
+            //   $("#form0").submit();
+            $("#donemEkleForm").find('[type="submit"]').trigger('click');
+        });
+
+        $("#donemEkleForm").on("submit", function (event) {
+            event.preventDefault();
+
+
+            $.post('@Url.Action("donemEkleme", "Admin")', $("#donemEkleForm").serialize(), function (data) {
+                //do whatever with the response
+
+                if (data.durum == "true")
+                {
+                    alert("Dönem Ekleme Başarılı");
+                          $("#donemTable tbody tr").remove();
+                         donemBilgileriDropdown();
+
+                   // $("#donemEkleForm").css("display","none");
+                }
+                else
+                alert("hata");
+        });
+
+        });
+
+
+         $("#btnDonemGuncelle").click(function () {
+            //   $("#form0").submit();
+            $("#donemGuncelleForm").find('[type="submit"]').trigger('click');
+        });
+
+        $("#donemGuncelleForm").on("submit", function (event) {
+            event.preventDefault();
+              console.log($("#donemEkleForm").serialize());
+            $.post('@Url.Action("donemGuncelle", "Admin")', $("#donemGuncelleForm").serialize(), function (data) {
+                //do whatever with the response
+
+                  console.log($("#donemEkleForm").serialize());
+                if (data.durum == "true")
+                {
+                    alert("Dönem Güncelleme Başarılı");
+                          $("#donemTable tbody tr").remove();
+                         donemBilgileriDropdown();
+
+                   // $("#donemEkleForm").css("display","none");
+                }
+                else
+                alert("hata");
+            });
+        });
+
+        /*
+        $("#btnDonemEkleme").click(function () {
+            var formData = JSON.stringify($("#form0").serializeArray());
+            console.log(formData);
+            $.ajax({
+                url: '',
+                type: 'POST',
+                dataType: "json",
+                contentType: 'application/json',
+                data: formData
+            });
+        });
+        */
+          function prevStep() {
+              $("button[adim='" + aktifBolum + "']").click();
+              aktifBolum--;
+              console.log("aktif bolum : " + aktifBolum);
+        }
+
+        function nextStep() {
+            $("button[adim='" + aktifBolum + "']").click();
+            aktifBolum++;
+            console.log("aktif :" + aktifBolum);
+        }
+        var rowId = 1;
+
+ 
+
+
+        function toplamGuncelle(x,id) {
+           // if (x == 0)//erkek sayisi
+            //    alert("erkek");
+            console.log(""+x+ "id:"+id);
+        }
+        toplamGuncelle(0,1);
+
+        $("#odaBilgileriBtn").click(function () {
+            var odaTipleri = new Array();
+               var donemTipiId = $("#donemBilgileriCombobox").find('option:selected').val();
+            //get all of the values except the header
+            $("#roomTable tr:not(:first)").each(function () {
+                var tdInputs = $(this).find("td input");
+                var tds = $(this).find("td");
+                var ths = $(this).find("th input");
+                console.log(tds.length);
+                //you could use the Find method to find the texbox or the dropdownlist and get the value.
+                var odaTipi = { donemTipiId: donemTipiId, odaAdi: $(ths[0]).val(), odaTipiId: $(tds[0]).text(), odaTipiKontenjanId: $(tds[1]).text(), erkekKontenjan: $(tdInputs[0]).val(), kizKontenjan: $(tdInputs[1]).val() }
+                odaTipleri.push(odaTipi);
+                console.log(odaTipleri);
+
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("odaTipiEkleme", "Admin")', //
+                dataType: "html",
+                data: JSON.stringify(odaTipleri),
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Kayıt İşlemi Başarılı");
+                        odaBilgileriTablosu();
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        });
+
+
+
+
+        function donemBilgileriDropdown(){
+            let donemBilgileriDropdown = $("#donemBilgileriCombobox");
+
+            donemBilgileriDropdown.empty();
+            donemBilgileriDropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
+            const donemBilgileriUrl = '@Url.Action("donemBilgileriGetir", "Admin")';
+
+            $.getJSON(donemBilgileriUrl, function (data) {
+                var count = Object.keys(data).length;
+                if (count > 0) {
+                    $.each(data, function (key, entry) {
+
+                        donemBilgileriDropdown.append($('<option></option>').attr('value', entry.donemTipiID).text(entry.adi));
+                        if (entry.aktiflik == 1) {
+                            $("#donemTable").append("<tr class='text-success font-weight-bold'><th scope='row' class='donemTipiID'>" + entry.donemTipiID + "</th><td><button type='button' class='btn btn-primary btn-sm' id='btnSec" + entry.donemTipiID + "' donemTipiID='" + entry.donemTipiID + "'>Seç</button></td> <td>" + entry.adi + "</td> <td class='donemID'>" + entry.donemID + "</td><td>" + entry.donemAdi + "</td><td>" + ToJavaScriptDate(entry.baslangicTarihi) + "</td><td>" + ToJavaScriptDate(entry.bitisTarihi) + "</td><td><button id='btnPasifYap" + entry.donemID + "' type='button' class='btn btn-secondary btn-sm' donemID='" + entry.donemID + "'>Pasif Yap</button></td><td><button type='button' class='btn btn-warning btn-sm'  donemID='" + entry.donemID + "' id='btnDuzenle" + entry.donemID + "'>Düzenle</button></td><td><button type='button' class='btn btn-danger btn-sm'  id='btnArsivle" + entry.donemID + "'  donemID='" + entry.donemID + "'>Arşivle</button></td></tr>");
+                            document.getElementById("btnPasifYap" + entry.donemID + "").addEventListener("click", donemPasifYap);
+                            document.getElementById("btnDuzenle" + entry.donemID + "").addEventListener("click", duzenleModalShow);
+                            document.getElementById("btnArsivle" + entry.donemID + "").addEventListener("click", donemArsivle);
+                            document.getElementById("btnSec" + entry.donemTipiID + "").addEventListener("click", donemSec);
+                        } else {
+                            $("#donemTable").append("<tr><th scope='row' class='donemTipiID'>" + entry.donemTipiID + "</th><td><button class='btn btn-primary btn-sm' type='button' id='btnSec" + entry.donemTipiID + "' donemTipiID='" + entry.donemTipiID + "'>Seç</button></td> <td>" + entry.adi + "</td> <td class='donemID'>" + entry.donemID + "</td><td>" + entry.donemAdi + "</td><td>" + ToJavaScriptDate(entry.baslangicTarihi) + "</td><td>" + ToJavaScriptDate(entry.bitisTarihi) + "</td><td><button type='button' class='btn btn-success btn-sm' id='btnAktifYap" + entry.donemID + "' donemID='" + entry.donemID + "'>Aktif Yap</button></td><td><button class='btn btn-warning btn-sm' type='button' id='btnDuzenle" + entry.donemID + "'  donemID='" + entry.donemID + "'>Düzenle</button></td><td><button  type='button' class='btn btn-danger btn-sm'  id='btnArsivle" + entry.donemID + "'  donemID='" + entry.donemID + "'>Arşivle</button></td></tr>");
+                            document.getElementById("btnAktifYap" + entry.donemID + "").addEventListener("click", donemAktifYap);
+                            document.getElementById("btnDuzenle" + entry.donemID + "").addEventListener("click", duzenleModalShow);
+                            document.getElementById("btnArsivle" + entry.donemID + "").addEventListener("click", donemArsivle);
+                            document.getElementById("btnSec" + entry.donemTipiID + "").addEventListener("click", donemSec);
+
+                        }
+                    })
+                    //        donemBilgileriDropdown.prop('selectedIndex', 0);
+                    console.log("aa");
+                    $("#donemTable tbody tr th.donemTipiID").hide();
+                    $("#donemTable tbody tr td.donemID").hide();
+                    $("#donemTable").DataTable();
+                    $("#donemTable_wrapper").css("margin", "auto");
+                    console.log("aaa");
+                }
+
+            });
+        }
+        donemBilgileriDropdown();
+
+
+        $("#donemBilgileriCombobox").change(function () {
+            $("#ileriBtnForm0").show();
+        });
+
+        $("#geriBtnForm2").click(function () {
+            prevStep();
+        });
+        $("#geriBtnForm1").click(function () {
+            prevStep();
+        });
+        $("#ileriBtnForm0").click(function () {
+            nextStep();
+            odaBilgileriTablosu();
+        });
+          $("#ileriBtnForm1").click(function () {
+              nextStep();
+              evrakTipleriTablosu();
+
+          });
+
+        //OdaBilgileri Kontrolü
+        var roomTable;
+        function odaBilgileriTablosu() {
+
+            let odaBilgileriTablo = $("#roomTable");
+             //  var donemTipiId = $("#donemBilgileriCombobox").find('option:selected').val();
+             const odaBilgileriUrl = '@Url.Action("odaBilgileriGetir", "Admin")' + '?donemTipiID=' + secilenDonemId + '';
+
+            $.getJSON(odaBilgileriUrl, function (data) {
+                //     $( "#roomTable tbody tr" ).remove();
+                var count = Object.keys(data).length;
+                console.log("" + odaBilgileriUrl);
+                if (count > 0) {
+                    $.each(data, function (key, entry) {
+                        console.log("girdi");
+                        // donemBilgileriDropdown.append($('<option></option>').attr('value', entry.donemTipiID).text(entry.adi));
+                        var row = "<tr><th scope='row'><input type='text' class='form-control' value='" + entry.odaAdi + "'></th> <td>" + entry.odaTipiID + "</td> <td>" + entry.odaTipiKontenjanId + "</td><td><input id='row' type='number' value='" + entry.erkekKontenjan + "' class='form-control erkekSayisi' style='width:90px; margin:auto; vertical-align:middle;' min='0' ></td><td><input type='number'  value='" + entry.kizKontenjan + "' class='kizSayisi form-control' style='width:90px;  margin:auto; vertical-align:middle;' min='0' ><td><button id='odaSilBtn" + entry.odaTipiID + "' odaTipiId='" + entry.odaTipiID + "' odaTipiKontenjanId='" + entry.odaTipiKontenjanId + "' class='btn btn-danger btn-sm' type='button'>Sil</button></td></tr>";
+                        odaBilgileriTablo.append(row);
+                        document.getElementById("odaSilBtn" + entry.odaTipiID + "").addEventListener("click", odaSil);
+
+                    })
+                    roomTable = $("#roomTable").DataTable();
+                }
+            });
+          
+        }
+
+
+
+         function evrakTipleriTablosu(){
+            let odaBilgileriTablo = $("#evrakTablosu");
+             var donemTipiId = $("#donemBilgileriCombobox").find('option:selected').val();
+             const odaBilgileriUrl = '@Url.Action("evrakTipleriGetir", "Admin")' + '?donemTipiID=' + donemTipiId + '';
+
+             $.getJSON(odaBilgileriUrl, function (data) {
+                  $( "#evrakTablosu tbody tr" ).remove();
+                var count = Object.keys(data).length;
+                if (count > 0) {
+                    $.each(data, function (key, entry) {
+
+                        // donemBilgileriDropdown.append($('<option></option>').attr('value', entry.donemTipiID).text(entry.adi));
+                        var row = "";
+                        if(entry.zorunluluk==1)
+                         row = "<tr><th scope='row'>" + entry.evrakTipiID + "</th><td><input type='text' class='form-control' value='" + entry.evrakTipiAdi + "'></td><td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' id='customCheck" + entry.evrakTipiID + "' durum='1' checked><label class='custom-control-label' for='customCheck" + entry.evrakTipiID + "'>Zorunluluk</label></div></td ><td><button id='evrakTipiSilBtn" + entry.evrakTipiID + "' evrakTipiId='" + entry.evrakTipiID + "' class='btn btn-danger btn-sm' type='button'>Sil</button></td></tr > ";
+                        else
+                            row = "<tr><th scope='row'>" + entry.evrakTipiID + "</th><td><input type='text' class='form-control' value='" + entry.evrakTipiAdi + "'></td><td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' id='customCheck" + entry.evrakTipiID + "' durum='0'><label class='custom-control-label' for='customCheck" + entry.evrakTipiID + "'>Zorunluluk</label></div></td ><td><button id='evrakTipiSilBtn" + entry.evrakTipiID + "' evrakTipiId='" + entry.evrakTipiID + "' class='btn btn-danger btn-sm' type='button'>Sil</button></td></tr > ";
+                        odaBilgileriTablo.append(row);
+                          document.getElementById("customCheck" + entry.evrakTipiID + "").addEventListener("click", checkboxControl);
+                          document.getElementById("evrakTipiSilBtn" + entry.evrakTipiID + "").addEventListener("click", evrakTipiSil);
+
+                    })
+           //         donemBilgileriDropdown.prop('selectedIndex', 0);
+                }
+
+            });
+        }
+
+        /*
+         <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                  <label class="custom-control-label" for="customCheck1">1</label>
+              </div>
+         */
+
+        //evrakTipi Kontrolü
+
+        var evrakTipiId = -1;
+             $("#evrakTipiOlustur").click(function () {
+                 var evrakTipi = $("#evrakTipiText").val();
+                 var row = "<tr><th scope='row'>-1</th><td><input type='text' class='form-control' value='" + evrakTipi + "'></td><td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' checked durum='1' id='customCheck" + evrakTipiId + "' ><label class='custom-control-label' for='customCheck" + evrakTipiId + "'>Zorunluluk</label></div></td ></tr > ";
+                 $("#evrakTablosu tbody").append(row);
+                 document.getElementById("customCheck" + evrakTipiId + "").addEventListener("click", checkboxControl);
+                 // $("#row" + rowId+"").addEventListener("change", toplamGuncelle);
+                 rowId++
+                 evrakTipiId--;
+
+       //     console.log($("#roomTable").rows());
+        });
+
+
+
+         $("#evrakTipleriBtn").click(function () {
+            var evrakTipleri = new Array();
+               var donemTipiId = $("#donemBilgileriCombobox").find('option:selected').val();
+            //get all of the values except the header
+            $("#evrakTablosu tr:not(:first)").each(function () {
+                var tdInputs = $(this).find("td input");
+
+                var idBilgileri = $(this).find("th");
+
+                //you could use the Find method to find the texbox or the dropdownlist and get the value.
+                var evrakTipi = { evrakTipiId: idBilgileri.text(), evrakTipiAdi: $(tdInputs[0]).val(), zorunluluk: $(tdInputs[1]).attr("durum"),donemTipiId:donemTipiId }
+                evrakTipleri.push(evrakTipi);
+                console.log(evrakTipleri);
+
+            });
+
+
+            $.ajax({
+                url: '@Url.Action("evrakTipiEkleme", "Admin")', //
+                dataType: "html",
+                data: JSON.stringify(evrakTipleri),
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Kayıt İşlemi Başarılı");
+                        evrakTipleriTablosu();
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        });
+
+        function checkboxControl() {
+            console.log("girdi");
+            if ($(this).attr("durum") == "0") {
+                $(this).attr("durum", "1");
+                $(this).add("checked");
+            }
+            else {
+                $(this).attr("durum", "0");
+                $(this).removeAttr("checked");
+
+            }
+        }
+
+        function odaSil() {
+
+
+
+            $.ajax({
+                url: '@Url.Action("odaTipiSil", "Admin")',
+                dataType: "html",
+                data: { odaTipiKontenjanId: $(this).attr("odatipikontenjanid") },
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Silme İşlemi Başarılı");
+                        odaBilgileriTablosu();
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+          function evrakTipiSil() {
+
+
+
+            $.ajax({
+                url: '@Url.Action("evrakTipiSil", "Admin")',
+                dataType: "html",
+                data: { evrakTipiId: $(this).attr("evrakTipiId") },
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Silme İşlemi Başarılı");
+                        evrakTipleriTablosu();
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+           function donemAktifYap() {
+
+
+
+            $.ajax({
+                url: '@Url.Action("donemAktifYap", "Admin")',
+                dataType: "html",
+                data: { donemId: $(this).attr("donemID")},
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Dönem Aktif Edildi");
+                        $("#donemTable tbody tr").remove();
+                         donemBilgileriDropdown();
+
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+
+          function donemPasifYap() {
+
+
+
+            $.ajax({
+                url: '@Url.Action("donemPasifYap", "Admin")',
+                dataType: "html",
+                data: { donemId: $(this).attr("donemID")},
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Dönem Pasif Edildi");
+                         $("#donemTable tbody tr").remove();
+                         donemBilgileriDropdown();
+
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+
+            function donemArsivle() {
+                console.log("deneme");
+            $.ajax({
+                url: '@Url.Action("donemArsivle", "Admin")',
+                dataType: "html",
+                data: { donemId: $(this).attr("donemID")},
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //parse json, convert it to object.
+
+                    console.log("a" + data) ;
+                    if (jQuery.parseJSON(data).durum == "true")
+                    {
+                        alert("Dönem Arşivlendi");
+                         $("#donemTable tbody tr").remove();
+                         donemBilgileriDropdown();
+
+                    }
+                    else
+                        alert("İşlem Gerçekleştirilemedi");
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+
+
+
+
+          function duzenleModalShow() {
+
+            $.ajax({
+                url: '@Url.Action("donemBilgisiGetir", "Admin")',
+                dataType: "json",
+                data: { donemId: $(this).attr("donemID")},
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("#donemGuncelleForm").css("display","block");
+                    $("#duzenleModal").modal("show");
+                    //parse json, convert it to object.
+                    $("#donemIdEdit").val(data[0].donemID);
+                    $("#donemAdiEdit").val(data[0].donemAdi);
+                    $("#donemTipiAdiEdit").val(data[0].adi);
+                    $("#baslangicTarihiEdit").val(dateChange(data[0].baslangicTarihi));
+                    $("#bitisTarihiEdit").val(dateChange(data[0].bitisTarihi));
+                    console.log(data.length);
+
+
+                },
+                error: function (xhr) {
+                    alert("error");
+                }
+            });
+
+        }
+        var secilenDonemId;
+        function donemSec() {
+            secilenDonemId = $(this).attr("donemTipiID");
+            console.log("Secilen"+secilenDonemId);
+            console.log();
+             nextStep();
+            odaBilgileriTablosu();
+        }
+
+
+        function dateChange(value) {
+            var pattern = /Date\(([^)]+)\)/;
+            var results = pattern.exec(value);
+            var dt = new Date(parseFloat(results[1]));
+            var gun = dt.getDate();
+            var ay = (dt.getMonth() + 1);
+            var yil = dt.getFullYear();
+
+            if ((dt.getMonth() + 1) < 10) {
+                ay = "0" + ay;
+            }
+            if (dt.getDate() < 10)
+                gun = "0" + gun;
+
+            console.log(yil + "-" + ay + "-" + gun);
+            return yil + "-" + ay + "-" + gun;
+
+        }
+        function ToJavaScriptDate(value) {
+            try {
+                var pattern = /Date\(([^)]+)\)/;
+                var results = pattern.exec(value);
+                //    console.log(results);
+                var dt = new Date(parseFloat(results[1]));
+                return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear();
+            }
+            catch{
+                return "";
+            }
+            }
+
+    });
+</script>

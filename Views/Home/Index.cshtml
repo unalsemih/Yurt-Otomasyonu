@@ -1,0 +1,559 @@
+﻿@model YurtDb.Models.BasvuruFormu
+
+
+<div class="">
+    <div class="col-md-12 text-center">
+        <button type="button" class="btn btn-primary adimBtn" id="adim0" number="0">Giriş</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim1" number="1">Öğrenci Bilgileri (1.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim2" number="2">Oda Bilgileri (2.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim3" number="3">İndirim ve Evraklar (3.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim4" number="4">Ek Alanlar (4.Adım)</button>
+        <button type="button" class="btn btn-outline-primary adimBtn" id="adim5" number="5">Kayıt İşlemi (5.Adım)</button>
+    </div>
+</div>
+
+
+
+@if (Model.sayfaYonlendirme == 0 || (Model.sayfaYonlendirme == -1 && Model.basvuruAdimi == 0))
+{
+    <div class="offset-md-4 mt-4 col-md-4 col-sm-12">
+        <div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-body">
+                @using (Html.BeginForm("girisKontrol", "Home", FormMethod.Post))
+                {
+                    <div class="form-group">
+                        <label for="Numara">TC No</label>
+                        @Html.EditorFor(model => model.tcNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Öğrenci Numaranız", type = "text", minLenght = "11", maxlength = "11" } })
+                    </div>
+                    <div class="form-group text-center ">
+                        <button type="button" class="btn btn-success btn-sm " id="sorgulaBtn">Sorgula</button>
+                    </div>
+
+
+                    <div class="form-group" id="ogrenciCombobox" style="display:none;">
+                        <label for="inputState">Seçim Yapınız</label>
+                        @Html.DropDownList("egitimDurumu", new List<SelectListItem>
+                        { }, htmlAttributes: new { @class = "form-control", @id = "egitimTipleri", @onchange = "egitimTipleriChange()" })
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-outline-success btn-sm " id="nextBtn" style="display:none; margin:auto;">Devam Et</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+else if (Model.sayfaYonlendirme == 1 || (Model.sayfaYonlendirme == -1 && Model.basvuruAdimi == 1))
+{
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 37rem;">
+            <div class="card-body">
+                @using (Html.BeginForm("ogrenciBilgileriKontrol", "Home", FormMethod.Post))
+                {
+                    <div class="col-md-12 mb-4 text-center">
+                        <h5>Öğrenci Bilgileri</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Ad</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.adi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Adı", type = "text" } })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Soyad</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.soyadi, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Soyadı", type = "text" } })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">TC Kimlik No</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.tcNo, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Tc", type = "text" } })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Öğrenci No</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.ogrenciNo, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Öğrenci No", type = "text" } })
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Cinsiyet</label>
+                                @Html.EditorFor(model => model.ogrenciBilgileri.cinsiyet, new { htmlAttributes = new { @required = "required", @class = "form-control", placeholder = "Cinsiyet", type = "text" } })
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Fakülte">Fakülte</label>
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Bölüm">Bölüm</label>
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                            </div>
+                        </div>
+                    </div>
+                        -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group text-left">
+
+                                <input type="button" class="btn btn-success btn-sm" value="Geri Git" onclick="$('#adim0').click();" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group text-right ">
+                                @if (Model.basvuruAdimi > 1)
+                                {
+                                    <input type="button" class="btn btn-success btn-sm" onclick="$('#adim2').click();" value="İlerle" />
+
+                                }
+                                else
+                                {
+                                    <input type="submit" class="btn btn-success btn-sm" value="Devam Et" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+else if (Model.sayfaYonlendirme == 2 || (Model.sayfaYonlendirme == -1 && Model.basvuruAdimi == 2))
+{
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 37rem;">
+            <div class="card-body">
+                @using (Html.BeginForm("odaBilgileriKontrol", "Home", FormMethod.Post))
+                {<div class="col-md-12 mb-4 text-center">
+                        <h5>Oda Bilgileri</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputState">Oda Tipi</label>
+                                @Html.DropDownListFor(model => model.odaBilgileri.odaTipiId, Model.odaTipleri, htmlAttributes: new { @class = "form-control", @id = "odaTipleri", @onchange = "odaTipleriComboboxChange()" })
+
+                            </div>
+                        </div>
+                        @if (Model.basvuruAdimi <= 2)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group" id="öncelikCombobox" style="visibility:hidden;">
+                                    <label for="inputState">Öncelik Durumu</label>
+
+                                    @Html.DropDownListFor(model => model.odaBilgileri.indirimId, Model.indirimler, htmlAttributes: new { @class = "form-control", @id = "indirimTipleri", @onchange = "odaTipleriComboboxChange()" })
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group" id="öncelikCombobox">
+                                    <label for="inputState">Öncelik Durumu</label>
+
+                                    @Html.DropDownListFor(model => model.odaBilgileri.indirimId, Model.indirimler, htmlAttributes: new { @class = "form-control", @id = "indirimTipleri", @onchange = "odaTipleriComboboxChange()" })
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="card shadow p-3 mb-5 bg-white rounded" style="width:100%;">
+                        <div class="card-body">
+                            <h5 class="text-danger text-center" id="fiyatBilgisi">@Model.odaFiyati</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 text-left">
+
+                            <input type="button" class="btn btn-success btn-sm" onclick="$('#adim1').click();" value="Geri Git">
+
+                        </div>
+                        <div class="col-md-6">
+                            <div id="odaSecimSubmitBtn" class="form-group text-right" style="display:none;">
+                                <input type="submit" class="btn btn-success btn-sm" value="Devam Et">
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+}
+else if (Model.sayfaYonlendirme == 3 || (Model.sayfaYonlendirme == -1 && Model.basvuruAdimi == 3))
+{
+    @*
+        <div class="offset-md-3 mt-4 col-md-6">
+            <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+                <div class="card-body p-2">
+                    @using (Html.BeginForm("ogrenciBelgesiUpload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+
+                        <div class="col-md-12 mb-4 text-center">
+                            <h5>Öğrenci Belgesi</h5>
+                            <hr />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 pl-5">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary btn-sm inputDocument">Dosya Seç</button><span class="text-danger"> Dosya Seçilmedi</span>
+                                    <input type="file" name="file" class="form-control-file fileInput" id="fileInput" style="display:none" submitId="submit1" accept="application/pdf,application/vnd.ms-excel">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="form-group text-center " style="margin-bottom:4px;">
+                            <input type="submit" class="btn btn-success btn-sm disabled" id="submit1" value="Dosyayı Yükle" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    *@
+    foreach (var item in Model.evrakTipi)
+    {
+        <div class="offset-md-3 mt-4 col-md-6">
+            <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+                <div class="card-body p-2">
+                    @using (Html.BeginForm("evrakUpload", "Home", new { evrakTipiID = item.evrakTipiID }, FormMethod.Post, htmlAttributes: new { id = "evrakForm" + item.evrakTipiID, @class = "evrakForm", enctype = "multipart/form-data" }))
+                    {
+                        <div class="col-md-12 mb-4 text-center">
+                            <h5>@item.adi</h5>
+                            <hr />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 pl-5">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary btn-sm inputDocument">Dosya Seç</button>
+                                    @if (Model.yuklenenEvraklar.Contains(item.evrakTipiID))
+                                    {
+                                        <span class="text-success" id="dosyaDurum_@item.evrakTipiID"> Evrak Yüklendi</span>
+
+                                        <a href="@Url.Action("evrakGoster","Home",new { evrakTipiID=item.evrakTipiID })" id="btnEvrakGoster_@item.evrakTipiID" target="_blank" style="float:right" class="ml-2 btn btn-sm btn-outline-info">Evrağı Göster</a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger" id="dosyaDurum_@item.evrakTipiID"> Dosya Seçilmedi</span>
+                                        <a href="@Url.Action("evrakGoster","Home",new { evrakTipiID=item.evrakTipiID })" id="btnEvrakGoster_@item.evrakTipiID" style="float:right; display:none;" target="_blank" class="ml-2 btn btn-sm btn-outline-info">Evrağı Göster</a>
+
+                                    }
+                                    <input type="file" name="file" class="form-control-file fileInput" submitId="@item.evrakTipiID" id="fileInput" style="display:none" accept="application/pdf,application/vnd.ms-excel">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group text-center " style="margin-bottom:4px;">
+                            <button type="button" id="@item.evrakTipiID" class="btn btn-success btn-sm evrakSubmitBtn" disabled="disabled">Dosyayı Yükle</button>
+                            <input type="submit" id="evrakSubmitBtn_@item.evrakTipiID" class="btn btn-success btn-sm evrakSubmitBtn" style="display:none;" value="Dosyayı Yükle" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+    <div class="offset-md-3 mt-4 col-md-6">
+        <div class="card shadow mb-0 bg-white rounded" style="width: 37rem;">
+            <div class="card-body p-2">
+                <div class="row mt-2 mb-2 p-3">
+                    <div class="col-md-6 text-left">
+                        <button class="btn btn-success btn-sm" onclick="$('#adim2').click();">Geri Git</button>
+                    </div>
+                    @if (Model.evrakBilgileriList != null)
+                    {
+                        if (Model.evrakBilgileriList.Count == Model.yuklenenEvraklar.Count)
+                        {<div class="col-md-6 text-right">
+                                @using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                                {
+                                    <button class="btn btn-success btn-sm" id="kayitTamamlaBtn">Kaydı Tamamla</button>
+
+                                }
+                            </div>
+                        }
+                        else
+                        { <div class="col-md-6 text-right">
+                                @using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                                {
+                                    <button class="btn btn-success btn-sm" id="kayitTamamlaBtn" style="display:none;">Kaydı Tamamla</button>
+
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-md-6 text-right">
+                            @using (Html.BeginForm("kayitTamamla", "Home", FormMethod.Post))
+                            {
+                                <button class="btn btn-success btn-sm" id="kayitTamamlaBtn" style="display:none;">Kaydı Tamamla</button>
+
+                            }
+                        </div>
+                    }
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    @*
+        if (Model.yuklenenEvraklar.Count() == Model.evrakTipi.Count())
+        {
+            <div class="col-md-12 text-center mt-5"><button class="btn btn-success btn-sm" onclick="location.href='@Url.Action("basvuruAdimiGuncelle", "Home")'">Devam Et</button></div>
+        }
+    *@
+}
+
+<div class="modal fade bd-example-modal-lg" id="bilgiModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Dikkat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu adıma giderseniz seçtiğiniz işlemler sıfırlanacaktır. Devam etmek istiyor musunuz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="devamEtBtn">Devam Et</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+
+
+<script>
+        $(document).ready(function () {
+
+
+
+
+
+
+            if ($("#öncelikCombobox").css("visibility") != "hidden")
+                $("#odaSecimSubmitBtn").css("display", "block");
+            if ($("#öncelikCombobox").css("visibility") == "hidden")
+                $("#odaTipleri").append('<option selected="true" disabled>Oda Seçiniz</option>');
+
+
+
+
+
+            $(".inputDocument").click(function () {
+
+                var input = $(this).next().next().next().click();
+
+            });
+
+
+
+
+            $("#sorgulaBtn").click(function () {
+                if ($("#tcNo").val().length != 11) {
+                    alert("TC giriniz!");
+                }
+                else {
+                    $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
+                    $(this).attr("disabled", "disabled");
+
+
+                    let dropdown = $('#egitimTipleri');
+                    dropdown.empty();
+                    dropdown.append('<option selected="true" disabled>Seçim Yapınız</option>');
+                    const url2 = '@Url.Action("tcOgrenciSorgulama", "Home")' + "?tcNo=" + $("#tcNo").val().toString();
+                    
+                    $.getJSON(url2, function (data) {
+                        var count = Object.keys(data).length;
+                        if (count > 0) {
+                            $.each(data, function (key, entry) {
+                                dropdown.append($('<option></option>').attr('value', entry.egitimDurumu).text(entry.egitimDurumu));
+                            })
+                            dropdown.prop('selectedIndex', 0);
+                            $("#ogrenciCombobox").css("display", "block");
+                            $("#tcNo").attr("readonly", "readonly");
+                            $("#sorgulaBtn").css("display", "none");
+                        }
+                        else if (count == 1) {
+                            $("#nextBtn").click();
+                        }
+                    });
+                }
+            });
+
+
+            $(".adimBtn").click(function () {
+                if ($(this).attr("number") > 2) {
+                    const url2 = '@Url.Action("changeForm", "Home")' + "?number=" + $(this).attr("number").toString();
+                    window.location = url2;
+                }
+                else {
+                    $("#bilgiModal").attr("adim",$(this).attr("number").toString()+"");
+                    $("#bilgiModal").modal("show");
+
+                }
+
+
+            });
+
+            $(".evrakSubmitBtn").click(function () {
+                $(this).html('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Lütfen Bekleyiniz!');
+                $("#evrakForm" + $(this).attr('id')).submit();
+
+            });
+
+
+            /* Evrak Upload ... */
+
+            $(".evrakForm").on("submit", function (event){
+                event.preventDefault();
+                var url = $(this).attr("action");
+                var formData = new FormData($('form').get(0));
+               // console.log(formData);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,//file null dönememsi için
+                    processData: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error == "") {
+                            console.log("başarılı" + data);
+                            $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-danger");
+                            $("#dosyaDurum_" + data.evrakTipiID).addClass("text-success");
+
+                            $("#dosyaDurum_" + data.evrakTipiID).text("Evrak Gönderildi!");
+                            $("#" + data.evrakTipiID + "").attr("disabled", "disabled");
+                            $("#" + data.evrakTipiID + "").html("Dosya Gönderildi");
+                            $("#btnEvrakGoster_" + data.evrakTipiID + "").css("display", "block");
+                            if (data.kalanEvrakSayisi == 0)
+                                $("#kayitTamamlaBtn").css("display","inline-block");
+                        }
+                        else {
+                            $("#" + data.evrakTipiID + "").html("Evrak Gönderilemedi");
+                            console.log(data.error);
+                        }
+                    },
+                    error: function (data) {
+                        $("#dosyaDurum_" + data.evrakTipiID).removeClass("text-success");
+                        $("#dosyaDurum_" + data.evrakTipiID).addClass("text-danger");
+                        $("#dosyaDurum_" + data.evrakTipiID).text("Evrak gönderilemedi!");
+                    }
+
+                });
+
+
+            });
+
+            $("#devamEtBtn").click(function () {
+
+                        const url2 = '@Url.Action("islemleriGeriAl", "Home")' + "?numAdim=" + $("#bilgiModal").attr("adim").toString();
+                    window.location = url2;
+
+
+            });
+
+
+     $(".adimBtn").removeClass("btn-primary");
+    $(".adimBtn").removeClass("btn-outline-primary");
+    var adim = @Model.basvuruAdimi;
+        $(".adimBtn").addClass("btn-primary");
+        for (var i = 0; i < 6; i++)
+            if (i >@Model.basvuruAdimi)
+            {
+                $("#adim" + i + "").removeClass("btn-primary");
+                $("#adim" + i + "").addClass("btn-outline-primary");
+
+                $("#adim" + i + "").attr("disabled","disabled");
+
+            }
+
+
+                $( ".fileInput" ).change(function(e) {
+       var fileName = e.target.files[0].name;
+          $(this).prev().prev().text(" 1 dosya seçildi -- "+fileName );
+
+          $("#" + $(this).attr("submitID")).removeAttr("disabled");
+        });
+
+    });
+
+    function egitimTipleriChange(){
+       $("#nextBtn").css("display","block");
+    }
+
+
+    function odaTipleriComboboxChange() {
+
+    $('#öncelikCombobox').css('visibility', 'visible');
+    const url = '@Url.Action("getPrice", "Home")' + "?odaTipiID=" + $("#odaTipleri").val() + "&indirimID=" + $("#indirimTipleri").val();
+    console.log(url);
+    $.getJSON(url, function (data) {
+    $.each(data, function (key, entry) {
+    $("#fiyatBilgisi").text("Fiyat : " + entry.fiyat);
+        console.log("fiyat:" + entry.fiyat);
+        $("#odaSecimSubmitBtn").css("display", "block");
+    })
+    });
+
+
+
+    }
+
+
+
+</script>
